@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('dog', {
+  sequelize.define('temperament', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -11,20 +11,7 @@ module.exports = (sequelize) => {
     id:{
       type: DataTypes.INTEGER,
       primaryKey:true,
-      allowNull: false,
-      autoIncrement: true,
-      // defaultValue: 172
-    },
-    hight:{
-      type: DataTypes.FLOAT,
       allowNull: false
-    },
-    weight: {
-      type: DataTypes.FLOAT,
-      allowNull: false
-    },
-    years:{
-      type: DataTypes.INTEGER
     }
   });
 };
