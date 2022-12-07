@@ -4,17 +4,17 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('dog', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     id:{
       type: DataTypes.INTEGER,
       primaryKey:true,
       allowNull: false,
       autoIncrement: true,
-      // defaultValue: 172
     },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+   
     hight:{
       type: DataTypes.FLOAT,
       allowNull: false
@@ -26,5 +26,5 @@ module.exports = (sequelize) => {
     years:{
       type: DataTypes.INTEGER
     }
-  });
+  })
 };
