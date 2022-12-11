@@ -6,7 +6,7 @@ module.exports = (sequelize) => {
   sequelize.define('temperament', {
     id:{
       type: DataTypes.INTEGER,
-      primaryKey:true,
+      primaryKey: true,
       allowNull: false,
       autoIncrement: true
     },

@@ -82,32 +82,65 @@ router.get("/", async (req, res) => {
 
 router.get("/:idRaza", async(req, res) => {
     const {idRaza} = req.params
+    // console.log(typeof(idRaza))
+    const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
     try {
-        const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
+        if (!idRaza.includes("db")) {
         // const RUTA = `https://api.thedogapi.com/v1/breeds/search?q=${idRaza}&api_key=${YOUR_API_KEY`
-        const dogsArrayApi = await request({
-            uri: RUTA,
-            json: true
-        }).then(data => data)
-        const dogsArrayDB = await Dog.findAll()
-        const dogsArray = [...dogsArrayApi, ...dogsArrayDB]
-        let dog
-        for (d of dogsArray) {
-            if (d.name.toLowerCase() === idRaza.toLowerCase()) {
-                dog = {
-                    id: d.id,
-                    name: d.name,
-                    height: d.height,
-                    weight: d.weight,
-                    life_span: d.life_span,
-                    temperament: d.temperament,
-                    image: d.image
+            var dog = await request({
+                uri: RUTA,
+                json: true
+            })
+            .then(data => {
+                for (dog of data) {
+                    if (dog.id === Number(idRaza)) {
+                        return {
+                            id: dog.id,
+                            name: dog.name,
+                            height: dog.height,
+                            weight: dog.weight,
+                            life_span: dog.life_span,
+                            temperament: dog.temperament,
+                            image: dog.image.url
+                        }
+                    }
                 }
-                break
-            }
+            })
         }
-        if (dog) res.status(200).send(dog)
-        else res.status(400).send("Esta raza de perro no se encontro")        
+        else {
+            var dog = (await Dog.findByPk(idRaza, {
+                attributes: {exclude: ["createdAt", "updatedAt"]},
+                include: Temperament
+            }))
+            if (dog) {
+                dog = {...dog.dataValues, 
+                    temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
+                }
+            } 
+        }
+        // const dogsArrayDB = await Dog.findAll()
+        // const dogsArray = [...dogsArrayApi, ...dogsArrayDB]
+        // let dog
+        // for (d of dogsArray) {
+        //     if (d.name.toLowerCase() === idRaza.toLowerCase()) {
+        //         dog = {
+        //             id: d.id,
+        //             name: d.name,
+        //             height: d.height,
+        //             weight: d.weight,
+        //             life_span: d.life_span,
+        //             temperament: d.temperament,
+        //             image: d.image
+        //         }
+        //         break
+        //     }
+        // }
+        if (dog) {
+            return res.status(200).send(dog)
+        }
+        else {
+            throw new Error("idRaza inválido")
+        }        
     } catch(error) {
         res.status(400).send(error.message)
     }
