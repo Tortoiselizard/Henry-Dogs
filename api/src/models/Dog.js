@@ -5,17 +5,21 @@ module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('dog', {
     id:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       primaryKey:true,
       allowNull: false,
-      autoIncrement: true,
+      //autoIncrement: true,
+      set(value) {
+        this.setDataValue("id", `${value}db`)
+      }
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true
     },
    
-    hight:{
+    height:{
       type: DataTypes.FLOAT,
       allowNull: false
     },
@@ -23,8 +27,14 @@ module.exports = (sequelize) => {
       type: DataTypes.FLOAT,
       allowNull: false
     },
-    years:{
-      type: DataTypes.INTEGER
+    life_span:{
+      type: DataTypes.INTEGER,
+      set(value) {
+        this.setDataValue("life_span", value+1000)
+      }
+    },
+    image: {
+      type: DataTypes.STRING
     }
   })
 };
