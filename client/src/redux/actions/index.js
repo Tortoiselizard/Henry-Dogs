@@ -32,3 +32,11 @@ export const createDog = (dog) => {
         payload: {...dog}
     }
 };
+
+export const getAllTemperaments= () => {
+    return function (dispatch) {
+        return fetch('http://localhost:3001/temperaments')
+        .then((response) => response.json())
+        .then((data) => {dispatch({ type: GET_TEMPERAMENTS, payload: data})});
+        }
+}
