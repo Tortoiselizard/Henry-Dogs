@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Routes, useLocation} from "react-router-dom"
+import MainPage from './components/MainPage/MainPage.jsx';
 import Home from "./components/Home/Home.jsx"
 import DogDetail from "./components/DogDetail/DogDetail.jsx";
 import CreateDog from "./components/CreateDog/CreateDog";
@@ -10,14 +11,13 @@ function App() {
   const location = useLocation()
   return (
     <div className="App">
-      <Nav></Nav>
+      {location.pathname !== "/"? <Nav></Nav>: null}
       <Routes>
-        
+        <Route path='/' element={<MainPage/>}></Route>
         <Route path="/home" element={<Home></Home>}></Route>
         <Route path="/dog/:id" element={<DogDetail></DogDetail>}></Route>
         <Route path="/dog/create" element={<CreateDog></CreateDog>}></Route>
       </Routes>
-      <h1>Henry Dogs</h1>
     </div>
   );
 }
