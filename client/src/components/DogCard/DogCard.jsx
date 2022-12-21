@@ -1,16 +1,16 @@
 //import './bandCard.css';
 import React from 'react';
-import * as actions from "./../../redux/actions"
+import {getDogDetail} from "./../../redux/actions"
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
 const DogCard = (props) => {
 
     return <div>
-        <Link to="/dog/5"><p>DogName</p></Link>
-        <img src=''></img>
-        <span>Temperament</span>
-        <span>Weight</span>
+        <Link to={`/dog/${props.id}`}><label>{props.name}</label></Link>
+        <img src={props.image} alt={props.name}></img>
+        <span>{props.temperament}</span>
+        <span>{props.weight}</span>
     </div>
 };
 
