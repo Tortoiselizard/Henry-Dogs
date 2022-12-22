@@ -3,6 +3,8 @@ export const GET_DOG_DETAILS = "GET_DOG_DETAILS"
 export const CREATE_DOG = "CREATE_DOG"
 export const GET_TEMPERAMENTS = "GET_TEMPERAMENTS"
 export const CLEAN_DETAIL = "CLEAN_DETAIL"
+export const GET_DOGS_FOR_TEMPERAMENTS = "GET_DOGS_FOR_TEMPERAMENTS"
+export const ADD_TEMPERAMENT_FILTER = "ADD_TEMPERAMENT_FILTER"
 
 // 🟢 getAllDogs:
 // Esta función debe realizar una petición al Back-End. Luego despachar una action con la data recibida. End-Point: 'http://localhost:3001/dogs'.
@@ -53,4 +55,24 @@ export const getAllTemperaments= () => {
         .then((response) => response.json())
         .then((data) => {dispatch({ type: GET_TEMPERAMENTS, payload: data})});
         }
+}
+
+export const getDogsForTemperaments = (filter) => {
+    return function (dispatch) {
+        return fetch('http://localhost:3001/dogs')
+        .then((response) => response.json())
+        .then((data) => data.filter(dog => {
+            const temperamentsDog = dog.temperament? dog.temperament.split(", "):"null"
+            for (let temperamentFilter of filter) {
+                if (temperamentsDog.includes(temperamentFilter)) continue
+                else return false
+            }
+            return true
+        }))
+        .then((data) => {dispatch({ type: GET_DOGS_FOR_TEMPERAMENTS, payload: data})});
+    }
+}
+
+export const addTemperamentsFilter = (temperament) => {
+    return {type: ADD_TEMPERAMENT_FILTER, payload: temperament}
 }

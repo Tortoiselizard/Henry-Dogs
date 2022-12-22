@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import DogCard from "../DogCard/DogCard"
 import {useSelector} from "react-redux"
+import Filter from '../Filter/Filter';
 
 function Home() {
     const dogs = useSelector((state) => state.dogs)
@@ -45,8 +46,7 @@ function Home() {
     return <div>
         <h1>Elige a tu perro</h1>
         <div>
-            <input type="text" value="Filtrar por raza/Temperamento"></input>
-            <button>Filtrar</button>
+            <Filter></Filter>
             <input type="text" value="Alfavetico/Peso"></input>
             <button>Ordenar</button>
             <button name='anterior' onClick={changeDogs}>Anterior</button>
