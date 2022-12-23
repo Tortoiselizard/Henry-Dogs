@@ -1,4 +1,4 @@
-import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENTS, GET_DOGS_FOR_TEMPERAMENTS, ADD_TEMPERAMENT_FILTER} from "../actions"
+import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENTS, GET_DOGS_FOR_TEMPERAMENTS, ADD_TEMPERAMENT_FILTER, ORDER_ABC, ORDER_WEIGHT} from "../actions"
 
 const initialState = {
     dogs: [],
@@ -44,6 +44,16 @@ const rootReducer = (state = initialState, action) => {
             return {
                 ...state,
                 temperaments: [...state.temperaments, payload]
+            }
+        case ORDER_ABC:
+            return {
+                ...state,
+                dogs: payload
+            }
+        case ORDER_WEIGHT:
+            return {
+                ...state,
+                dogs: payload
             }
         default:
             return state

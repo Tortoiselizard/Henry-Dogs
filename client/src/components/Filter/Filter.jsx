@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter} from "../../redux/actions/index"
+import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation} from "../../redux/actions/index"
 
 function Filter() {
 
@@ -14,17 +14,24 @@ function Filter() {
         input["0"].value = ""
     }
 
-    function filterDispatch() {
+    function filterForTemperament() {
         if (state.temperaments.length>0) {
             dispatch(getDogsForTemperaments(state.temperaments))
         }
+    }
+
+    function filterForLocation(event) {
+        const location = event.target.name
+        dispatch(getDogsForLocation(location))
     }
 
     return <div>
         <h3>Filtrar</h3>
         <input type="text" placeholder="escribe el temperamento..." name="inputFilter"></input>
         <button onClick={handleChange}>+</button>
-        <button onClick={filterDispatch}>Filtrar</button>
+        <button onClick={filterForTemperament}>Filtrar</button>
+        <button onClick={filterForLocation} name="API">RAZAS EXISTENTES</button>
+        <button onClick={filterForLocation} name="DB">RAZAS AGREGADAS</button>
         <br/>
         <label>Temeramentos: </label>
         {

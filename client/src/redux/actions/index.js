@@ -5,6 +5,8 @@ export const GET_TEMPERAMENTS = "GET_TEMPERAMENTS"
 export const CLEAN_DETAIL = "CLEAN_DETAIL"
 export const GET_DOGS_FOR_TEMPERAMENTS = "GET_DOGS_FOR_TEMPERAMENTS"
 export const ADD_TEMPERAMENT_FILTER = "ADD_TEMPERAMENT_FILTER"
+export const ORDER_ABC = "ORDER_ABC"
+export const ORDER_WEIGHT = "ORDER_WEIGHT"
 
 // 🟢 getAllDogs:
 // Esta función debe realizar una petición al Back-End. Luego despachar una action con la data recibida. End-Point: 'http://localhost:3001/dogs'.
@@ -19,6 +21,23 @@ export const getAllDogs = (name) => {
     else {
         return function (dispatch) {
             return fetch(`http://localhost:3001/dogs?name=${name}`)
+            .then((response) => response.json())
+            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
+            }
+    }
+}
+
+export const getDogsForLocation = (location) => {
+    if (location === "API") {
+        return function (dispatch) {
+            return fetch(`http://localhost:3001/dogs?location=${location}`)
+            .then((response) => response.json())
+            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
+            }
+    }
+    else if (location === "DB") {
+        return function (dispatch) {
+            return fetch(`http://localhost:3001/dogs?location=${location}`)
             .then((response) => response.json())
             .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
             }
@@ -75,4 +94,28 @@ export const getDogsForTemperaments = (filter) => {
 
 export const addTemperamentsFilter = (temperament) => {
     return {type: ADD_TEMPERAMENT_FILTER, payload: temperament}
+}
+
+export const orderAlfabetic = (data) => {
+    // const sortData = data.sort((a,b) => {
+    //     const wordA = a.name.toLowerCase()
+    //     const wordB = b.name.toLowerCase()
+    //     for (let i = 0; i < (wordA.length<wordB.length?wordA.length:wordB.length) ; i++) {
+    //         if (wordA.charCodeAt(i)<wordB.charCodeAt(i)) return -1
+    //         else if (wordA.charCodeAt(i)>wordB.charCodeAt(i)) return 1
+    //     }
+    //     return 0
+    // })
+    return {type: ORDER_ABC, payload: data}
+}
+
+export const orderWeight = (data) => {
+    // const sortData = data.sort((a,b) => {
+    //     const rangeA = a.weight.imperial.split(" - ")
+    //     const rangeB = b.weight.imperial.split(" - ")
+    //     if (rangeA[0]<rangeB[0]) return -1
+    //     else if ((rangeA[0]>rangeB[0])) return 1
+    //     else {return rangeA[1]-rangeB[1]}
+    // })
+    return {type: ORDER_WEIGHT, payload: data}
 }

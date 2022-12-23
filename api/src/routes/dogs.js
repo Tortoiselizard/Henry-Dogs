@@ -38,27 +38,33 @@ router.post("/", async(req, res) => {
 })
 
 router.get("/", async (req, res) => {
-    const {name} = req.query
+    const {name, location} = req.query
+    const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
+    let dogsArrayApi = []
+    let dogsArrayDB = []
     try {
-        const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
-        const dogsArrayApi = await request({
-            uri: RUTA,
-            json: true
-        }).then(data => data.map(dog => ({
-            id: dog.id,
-            name: dog.name,
-            height: dog.height,
-            weight: dog.weight,
-            life_span: dog.life_span,
-            temperament: dog.temperament,
-            image: dog.image.url
-        })))
-        let dogsArrayDB = (await Dog.findAll({
-            attributes: {exclude: ["createdAt", "updatedAt"]},
-            include: Temperament
-        })).map(dog => ({...dog.dataValues, 
-            temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
-        }))
+        if (location === "API" || location === undefined) {
+            dogsArrayApi = await request({
+                uri: RUTA,
+                json: true
+            }).then(data => data.map(dog => ({
+                id: dog.id,
+                name: dog.name,
+                height: dog.height,
+                weight: dog.weight,
+                life_span: dog.life_span,
+                temperament: dog.temperament,
+                image: dog.image.url
+            })))
+        }
+        if (location === "DB" || location === undefined) {
+            let dogsArrayDB = (await Dog.findAll({
+                attributes: {exclude: ["createdAt", "updatedAt"]},
+                include: Temperament
+            })).map(dog => ({...dog.dataValues, 
+                temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
+            }))
+        }
         // let dogsArrayDB5 = dogsArrayDB.map(dog => ({...dog.dataValues,
         //     temperaments: dog.temperaments
         //     temperaments: dog.temperaments.map(temp => temp.name).join(", ")
