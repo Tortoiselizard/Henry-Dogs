@@ -9,18 +9,18 @@ function Home() {
     const dogs = useSelector((state) => state.dogs)
     const [showDogs, setShowDogs] = React.useState({
         start:0,
-        end:8,
+        
         list:[]
     })
 
     React.useEffect(()=> {
-        console.log("entre: ", showDogs)
+        // console.log("entre: ", showDogs)
         setShowDogs((showDogs) => ({
             ...showDogs,
-            list:dogs.slice(showDogs.start, showDogs.end)
+            list:dogs.slice(showDogs.start, showDogs.start+8)
         }))
         // console.log("en useEffect: " ,setShowDogs.list.length)
-    },[dogs, showDogs.start])
+    },[dogs, showDogs.start, showDogs.end])
 
     function changeDogs(event) {
         switch (event.target.name) {
@@ -29,7 +29,7 @@ function Home() {
                     setShowDogs(showDogs => ({
                         ...showDogs,
                         start: showDogs.start + 8,
-                        end: showDogs.end + 8
+                    
                     }))
                 }
                 // console.log("Siguiente: ", showDogs.list.length)
@@ -39,7 +39,7 @@ function Home() {
                     setShowDogs(showDogs => ({
                         ...showDogs,
                         start: showDogs.start - 8,
-                        end: showDogs.end - 8
+                        
                     }))
                 }
                 break
@@ -55,6 +55,7 @@ function Home() {
         <div>
             <Filter></Filter>
             <Order></Order>
+            <br></br>
             <button name='anterior' onClick={changeDogs}>Anterior</button>
             <button name='siguiente' onClick={changeDogs}>Siguiente</button>
         </div>
