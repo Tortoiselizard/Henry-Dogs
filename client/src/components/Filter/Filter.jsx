@@ -4,40 +4,70 @@ import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDo
 
 function Filter() {
 
-    // const [list, setList] = React.useState([])
+    const [temperamentsToFilter, setTemperamentsToFilter] = React.useState({
+        list: []
+    })
+    
     const dispatch = useDispatch()
-    const state = useSelector(state => state)
+    const globalState = useSelector(state => state)
 
-    function handleChange() {
+    React.useEffect(() => {
+        dispatch(getAllTemperaments())
+    }, [dispatch])
+
+    function addTemperamentToFilter() {
         const input = document.getElementsByName("inputFilter")
-        dispatch(addTemperamentsFilter(input["0"].value))
-        input["0"].value = ""
+        const temperament = input[0].value
+        if (globalState.temperaments.includes(temperament)) {
+            setTemperamentsToFilter(temperamentsToFilter => ({list: [...temperamentsToFilter.list, temperament]}))
+            input["0"].value = ""
+        } else {
+            alert(`El temperamento ${temperament} no existe`)
+        }
+        
+    }
+
+    function restTemperamentToFilter(event) {
+        const indexTemperament = event.target.name.slice(19)
+        setTemperamentsToFilter(temperamentsToFilter => {
+            let newTemperamentToFilter = [...temperamentsToFilter.list]
+            newTemperamentToFilter.splice(indexTemperament,1)
+            return {
+                list: [...newTemperamentToFilter]
+            }
+        })
     }
 
     function filterForTemperament() {
-        if (state.temperaments.length>0) {
-            dispatch(getDogsForTemperaments(state.temperaments))
+        if (temperamentsToFilter.list.length>0) {
+            const dogsToFilter = [...globalState.dogs]
+            globalState.dogs.length? dispatch(getDogsForTemperaments(temperamentsToFilter.list, dogsToFilter))
+            :dispatch(getDogsForTemperaments(temperamentsToFilter.list))
         }
     }
 
     function filterForLocation(event) {
         const location = event.target.name
-        dispatch(getDogsForLocation(location))
+        !globalState.dogs.length? dispatch(getDogsForLocation(location)): dispatch(getDogsForLocation(location, globalState.dogs))
     }
 
     return <div>
         <h3>Filtrar</h3>
+        <label>Por temperamento: </label>
         <input type="text" placeholder="escribe el temperamento..." name="inputFilter"></input>
-        <button onClick={handleChange}>+</button>
+        <button onClick={addTemperamentToFilter}>+</button>
         <button onClick={filterForTemperament}>Filtrar</button>
         <button onClick={filterForLocation} name="API">RAZAS EXISTENTES</button>
         <button onClick={filterForLocation} name="DB">RAZAS AGREGADAS</button>
         <br/>
-        <label>Temeramentos: </label>
+        <label>Temeramentos para filtrar: </label>
         {
-            state.temperaments.length > 0? state.temperaments.map((temperament, index) => <label key={index}>{temperament}<button>x</button>, </label>):null
+            temperamentsToFilter.list.length > 0? temperamentsToFilter.list.map((temperament, index) => <div key={index}>
+                <label>{temperament}</label>
+                <button onClick={restTemperamentToFilter} name={`temperamentToFilter${index}`}>x</button>
+                </div>)
+                :null
         }
-        
     </div>
 }
 

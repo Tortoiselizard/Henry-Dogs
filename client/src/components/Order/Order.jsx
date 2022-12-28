@@ -23,14 +23,14 @@ function Order() {
         while (left.length || right.length) {
             if (left.length && right.length) {
                 
-                if (left[0].weight.imperial.includes("–")) {
-                    left[0].weight.imperial = left[0].weight.imperial.replace("–","-")
+                if (left[0].weight.includes("–")) {
+                    left[0].weight = left[0].weight.replace("–","-")
                 }
-                if (right[0].weight.imperial.includes("–")) {
-                    right[0].weight.imperial = right[0].weight.imperial.replace("–", "-")
+                if (right[0].weight.includes("–")) {
+                    right[0].weight = right[0].weight.replace("–", "-")
                 }
                 
-                const r0 = ((regNumber.test(left[0].weight.imperial.split("-")[0])? null:(left[0].weight.imperial.split("-")[0])) - (regNumber.test(right[0].weight.imperial.split("-")[0])? null:(right[0].weight.imperial.split("-")[0])))
+                const r0 = ((regNumber.test(left[0].weight.split("-")[0])? null:(left[0].weight.split("-")[0])) - (regNumber.test(right[0].weight.split("-")[0])? null:(right[0].weight.split("-")[0])))
                 
                 
                 if (r0 < 0) {
@@ -40,7 +40,7 @@ function Order() {
                 } 
                 else {
                     
-                    const r1 = (regNumber.test(left[0].weight.imperial.split("-")[1])? null:Number(left[0].weight.imperial.split("-")[1])) - (regNumber.test(right[0].weight.imperial.split("-")[1])? null:Number(right[0].weight.imperial.split("-")[1]))
+                    const r1 = (regNumber.test(left[0].weight.split("-")[1])? null:Number(left[0].weight.split("-")[1])) - (regNumber.test(right[0].weight.split("-")[1])? null:Number(right[0].weight.split("-")[1]))
                     
                     
                     if (r1 <= 0) {
@@ -82,14 +82,13 @@ function Order() {
             // const sortData = [dogs[1]]
             const sortData = mergeSort(data)
             // data.sort((a,b) => {
-            //     if ((regNumber.test(a.weight.imperial.split(" - ")[0])? null: Number(a.weight.imperial.split(" - ")[0]))-(regNumber.test(b.weight.imperial.split(" - ")[0])? null:Number(b.weight.imperial.split(" - ")[0])) === 0) {
-            //         return (regNumber.test(a.weight.imperial.split(" - ")[1])? null:Number(a.weight.imperial.split(" - ")[1]))-(regNumber.test(b.weight.imperial.split(" - ")[1])? null:Number(b.weight.imperial.split(" - ")[1]))
+            //     if ((regNumber.test(a.weight.metric.split(" - ")[0])? null: Number(a.weight.metric.split(" - ")[0]))-(regNumber.test(b.weight.metric.split(" - ")[0])? null:Number(b.weight.metric.split(" - ")[0])) === 0) {
+            //         return (regNumber.test(a.weight.metric.split(" - ")[1])? null:Number(a.weight.metric.split(" - ")[1]))-(regNumber.test(b.weight.metric.split(" - ")[1])? null:Number(b.weight.metric.split(" - ")[1]))
             //     }
-            //     return (regNumber.test(a.weight.imperial.split(" - ")[0])? null:Number(a.weight.imperial.split(" - ")[0]))-(regNumber.test(b.weight.imperial.split(" - ")[0])? null:Number(b.weight.imperial.split(" - ")[0]))
+            //     return (regNumber.test(a.weight.metric.split(" - ")[0])? null:Number(a.weight.metric.split(" - ")[0]))-(regNumber.test(b.weight.metric.split(" - ")[0])? null:Number(b.weight.metric.split(" - ")[0]))
             // })
             inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderWeight(sortData.reverse())):
             dispatch(orderWeight(sortData))
-            sortData.forEach(dog => console.log(dog.weight.imperial))
         }
         else {
             data.sort((a,b) => {

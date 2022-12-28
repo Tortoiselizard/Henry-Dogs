@@ -9,7 +9,6 @@ function Home() {
     const dogs = useSelector((state) => state.dogs)
     const [showDogs, setShowDogs] = React.useState({
         start:0,
-        
         list:[]
     })
 
@@ -65,7 +64,7 @@ function Home() {
                     name={dog.name}
                     image={dog.image}
                     temperament={dog.temperament}
-                    weight={dog.weight.imperial}
+                    weight={dog.weight}
                     id={dog.id}
                     key={dog.id}
                 />)
