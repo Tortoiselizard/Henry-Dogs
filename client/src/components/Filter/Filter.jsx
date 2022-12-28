@@ -56,9 +56,12 @@ function Filter() {
         <label>Por temperamento: </label>
         <input type="text" placeholder="escribe el temperamento..." name="inputFilter"></input>
         <button onClick={addTemperamentToFilter}>+</button>
-        <button onClick={filterForTemperament}>Filtrar</button>
+        <label>Por Ubicación: </label>
+        <label>API </label>
         <button onClick={filterForLocation} name="API">RAZAS EXISTENTES</button>
+        <label>API </label>
         <button onClick={filterForLocation} name="DB">RAZAS AGREGADAS</button>
+        <button onClick={filterForTemperament}>Filtrar</button>
         <br/>
         <label>Temeramentos para filtrar: </label>
         {

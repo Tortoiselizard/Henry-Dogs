@@ -97,7 +97,7 @@ router.get("/:raza_perro", async(req, res) => {
                 temperament: data[0].temperament,
                 origin: data[0].origin,
                 breed_group: data[0].breed_group,
-                image: `https://cdn2.thedogapi.com/images/${data[0].reference_image_id}`
+                image: `https://cdn2.thedogapi.com/images/${data[0].reference_image_id}.jpg`
         }})
         .catch(()=> null)
         

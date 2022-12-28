@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 const DogCard = (props) => {
 
     return <div>
-        <Link to={`/dog/${props.id}`}><label>{props.name}</label></Link>
+        <Link to={`/dog/${props.name}`}><label>{props.name}</label></Link>
         <br></br>
         <img src={props.image} alt={props.name}></img>
         <br></br>

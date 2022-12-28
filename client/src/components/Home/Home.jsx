@@ -55,8 +55,12 @@ function Home() {
             <Filter></Filter>
             <Order></Order>
             <br></br>
-            <button name='anterior' onClick={changeDogs}>Anterior</button>
-            <button name='siguiente' onClick={changeDogs}>Siguiente</button>
+            {
+                dogs.length>1? <div>
+                <button name='anterior' onClick={changeDogs}>Anterior</button>
+                <button name='siguiente' onClick={changeDogs}>Siguiente</button>
+                </div>:null
+            }
         </div>
         <div>
             {
@@ -70,10 +74,13 @@ function Home() {
                 />)
             }
         </div>
-        <div>
+        {
+            dogs.length>1? <div>
             <button name='anterior' onClick={changeDogs}>Anterior</button>
             <button name='siguiente' onClick={changeDogs}>Siguiente</button>
-        </div>
+            </div>:null
+        }
+        
     </div>
 }
 

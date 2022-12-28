@@ -8,9 +8,8 @@ function MainPage() {
     const dispatch = useDispatch()
     const temperaments = useSelector(state => state.temperaments)
 
-    React.useEffect(() => {
-        console.log("entre")
-        dispatch(updateTemperaments())
+    React.useEffect(async () => {
+        await dispatch(updateTemperaments())
         dispatch(getAllTemperaments())
     }, [dispatch])
 

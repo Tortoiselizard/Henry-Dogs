@@ -23,8 +23,8 @@ function DogDetail() {
             <p>{dogDetail.name}</p>
             <img src={dogDetail.image} alt={dogDetail.name}></img>
             <p>Temperaments: <span>{dogDetail.temperament}</span></p>
-            <p>Height: <span>{dogDetail.height.imperial}</span></p>
-            <p>Weight: <span>{dogDetail.weight.imperial}</span></p>
+            <p>Height (cm): <span>{dogDetail.height}</span></p>
+            <p>Weight (kg): <span>{dogDetail.weight}</span></p>
             <p>years: <span>{dogDetail.life_span}</span></p>        
         </div>:null}
     </div>
