@@ -18,19 +18,18 @@ module.exports = (sequelize) => {
       allowNull: false,
       unique: true
     },
-   
     height:{
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     weight: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false
     },
     life_span:{
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       set(value) {
-        this.setDataValue("life_span", value+1000)
+        this.setDataValue("life_span", value+" years")
       }
     },
     image: {

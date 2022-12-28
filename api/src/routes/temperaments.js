@@ -9,46 +9,43 @@ const router = Router()
 router.get("/", async (req, res) => {
 
     try {
-        const temperamentsArray = await Temperament.findAll()
-        if (temperamentsArray.length) {
-            res.status(200).send(temperamentsArray)
-        } else {
-            const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
-            const dogsArray = await request({
+        const temperamentsArrayDB = await Temperament.findAll()
+        res.status(200).send(temperamentsArrayDB)      
+    } catch(error) {
+        res.status(400).send(error.message)
+    }
+})
+
+router.post("/", async (req, res) => {
+    const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
+    const {add} = req.query
+    
+    const temperamentsArrayDB = await Temperament.findAll()
+    const arrayTemperaments = temperamentsArrayDB.map(temperament => temperament.name)
+    let newTemperaments = []
+    
+    try {
+        if (add === "update") {
+            const dogsArrayAPI = await request({
                 uri: RUTA,
                 json: true
             }).then(data => data)
-            // dogsArray.forEach(async (dog) => {
-            //     dog.temperament && dog.temperament.split(", ").forEach(temperament => {
-            //         !temperamentsArray.includes(temperament)? temperamentsArray.push(temperament):null
-            //     })
-            // })
-
-            dogsArray.forEach(async (dog) => {
+        
+            dogsArrayAPI.forEach(async (dog) => {
                 dog.temperament && dog.temperament.split(", ").forEach(temperament => {
-                    !temperamentsArray.includes(temperament)? temperamentsArray.push({name: temperament}):null
+                    !arrayTemperaments.includes(temperament)? newTemperaments.push({name: temperament}):null
                 })
             })
-
-            // console.log(temperamentsArray)
-            // const temperaments = temperamentsArray.map( async (name) => {
-            //     const newTemperament = await Temperament.create({name})
-            //     console.log(newTemperament)
-            //     return newTemperament
-            // })
-            // console.log(temperaments)
-
-
-            // let temperaments = []
-            // for (name of temperamentsArray) {
-            //     const newTemperament = await Temperament.create({name})
-            //     temperaments.push(newTemperament)
-            // }
-
-            const newTemperaments = await Temperament.bulkCreate(temperamentsArray)
-            res.status(200).json(newTemperaments)
-        }      
-    } catch(error) {
+        }
+        if (add === "add") {
+            req.body.forEach(temperament => {
+                !arrayTemperaments.includes(temperament)? newTemperaments.push({name: temperament}):null
+            })
+        }
+        const newTemperamentsToCreate = await Temperament.bulkCreate(newTemperaments)
+        res.status(200).json(newTemperamentsToCreate)
+    }
+    catch(error) {
         res.status(400).send(error.message)
     }
 })

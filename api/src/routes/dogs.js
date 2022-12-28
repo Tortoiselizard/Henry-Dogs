@@ -2,11 +2,10 @@ require('dotenv').config()
 const {Router} = require("express")
 const request = require("request-promise")
 const {Dog, Temperament} =require("../db")
+const {Op} = require("sequelize")
 const {YOUR_API_KEY} = process.env
 
 const router = Router()
-
-// router.get("/")
 
 let idDog = 1
 
@@ -14,23 +13,19 @@ router.post("/", async(req, res) => {
     const {name, height, weight, life_span, image, temperaments} = req.body
     try {
         if (name && height && weight) {
+            const dog = await Dog.findAll({where: {name}})
+            if (dog.length) throw new Error(`El nombre de raza ${name} ya existe`)
+            for (let t of temperaments) {
+                const temp = await Temperament.findAll({where: {id:Number(t)}})
+                if (!temp.length) throw new Error(`El temperamento ${t} no existe`)
+            }
+
             const newDog = await Dog.create({id: idDog++, ...req.body})
-
-            // await Dog.update({
-            //     id: newDog.id+264
-            // }, {
-            //     where: {
-            //         id: newDog.id
-            //     }
-            // })
-            // newDog.id = newDog.id + 264
-            // await newDog.save()
-
             await newDog.addTemperaments(temperaments)
-            return res.status(200).send(newDog)
+            return res.status(200).send(newDog)    
         }
         else {
-            res.status(404).send("Los atributos: name, height y weight no pueden ser nulos")
+            throw new Error("Los atributos: name, height y weight no pueden ser nulos")
         }
     } catch(error) {
         res.status(400).send(error.message)
@@ -50,26 +45,22 @@ router.get("/", async (req, res) => {
             }).then(data => data.map(dog => ({
                 id: dog.id,
                 name: dog.name,
-                height: dog.height,
-                weight: dog.weight,
+                height: dog.height.metric,
+                weight: dog.weight.metric,
                 life_span: dog.life_span,
                 temperament: dog.temperament,
                 image: dog.image.url
             })))
         }
         if (location === "DB" || location === undefined) {
-            let dogsArrayDB = (await Dog.findAll({
+                dogsArrayDB = (await Dog.findAll({
                 attributes: {exclude: ["createdAt", "updatedAt"]},
                 include: Temperament
             })).map(dog => ({...dog.dataValues, 
                 temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
             }))
         }
-        // let dogsArrayDB5 = dogsArrayDB.map(dog => ({...dog.dataValues,
-        //     temperaments: dog.temperaments
-        //     temperaments: dog.temperaments.map(temp => temp.name).join(", ")
-        // }))
-        // console.log(dogsArrayDB[0].temperaments[0].dataValues.name)
+       
         const dogsArray = [...dogsArrayApi, ...dogsArrayDB]
         if (name) {
             var arrayDogs = await dogsArray.filter(dog => {
@@ -81,73 +72,52 @@ router.get("/", async (req, res) => {
             var arrayDogs = dogsArray
         }  
         res.status(200).send(arrayDogs)
-    } catch(error) {
+    }
+    catch(error) {
         res.status(400).send(error.message)
     }
 })
 
-router.get("/:idRaza", async(req, res) => {
-    const {idRaza} = req.params
-    // console.log(typeof(idRaza))
-    const RUTA = `https://api.thedogapi.com/v1/breeds?api_key=${YOUR_API_KEY}`
-    try {
-        if (!idRaza.includes("db")) {
-        // const RUTA = `https://api.thedogapi.com/v1/breeds/search?q=${idRaza}&api_key=${YOUR_API_KEY`
-            var dog = await request({
-                uri: RUTA,
-                json: true
-            })
-            .then(data => {
-                for (dog of data) {
-                    if (dog.id === Number(idRaza)) {
-                        return {
-                            id: dog.id,
-                            name: dog.name,
-                            height: dog.height,
-                            weight: dog.weight,
-                            life_span: dog.life_span,
-                            temperament: dog.temperament,
-                            image: dog.image.url
-                        }
-                    }
-                }
-            })
-        }
-        else {
-            var dog = (await Dog.findByPk(idRaza, {
-                attributes: {exclude: ["createdAt", "updatedAt"]},
-                include: Temperament
-            }))
-            if (dog) {
-                dog = {...dog.dataValues, 
-                    temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
-                }
+router.get("/:raza_perro", async(req, res) => {
+    const {raza_perro} = req.params
+    const RUTA = `https://api.thedogapi.com/v1/breeds/search?q=${raza_perro}&api_key=${YOUR_API_KEY}`
+    var dog
+    try {    
+        dogFindedAPI = await request({
+            uri: RUTA,
+            json: true
+        })
+        .then(data => {
+            return {
+                id: data[0].id,
+                name: data[0].name,
+                height: data[0].height.metric,
+                weight: data[0].weight.metric,
+                life_span: data[0].life_span,
+                temperament: data[0].temperament,
+                origin: data[0].origin,
+                breed_group: data[0].breed_group,
+                image: `https://cdn2.thedogapi.com/images/${data[0].reference_image_id}`
+        }})
+        .catch(()=> null)
+        
+        var dogFindedDB = (await Dog.findOne({
+            where: {name: raza_perro[0].toUpperCase() + raza_perro.slice(1).toLowerCase()},
+            attributes: {exclude: ["createdAt", "updatedAt"]},
+            include: Temperament
+        }))
+        if(dogFindedDB) {
+            dog = {...dogFindedDB.dataValues, 
+                temperaments: dogFindedDB.temperaments.map(t => t.dataValues.name).join(", ")
             } 
+
+        } else {
+            if (dogFindedAPI) {dog = dogFindedAPI}
+            else {throw new Error(`El nombre de la raza ${raza_perro} no se encontró`)}
         }
-        // const dogsArrayDB = await Dog.findAll()
-        // const dogsArray = [...dogsArrayApi, ...dogsArrayDB]
-        // let dog
-        // for (d of dogsArray) {
-        //     if (d.name.toLowerCase() === idRaza.toLowerCase()) {
-        //         dog = {
-        //             id: d.id,
-        //             name: d.name,
-        //             height: d.height,
-        //             weight: d.weight,
-        //             life_span: d.life_span,
-        //             temperament: d.temperament,
-        //             image: d.image
-        //         }
-        //         break
-        //     }
-        // }
-        if (dog) {
-            return res.status(200).send(dog)
-        }
-        else {
-            throw new Error("idRaza inválido")
-        }        
-    } catch(error) {
+        return res.status(200).send(dog)      
+    }
+    catch(error) {
         res.status(400).send(error.message)
     }
 })
