@@ -7,16 +7,15 @@ export const GET_DOGS_FOR_TEMPERAMENTS = "GET_DOGS_FOR_TEMPERAMENTS"
 export const ADD_TEMPERAMENT_FILTER = "ADD_TEMPERAMENT_FILTER"
 export const ORDER_ABC = "ORDER_ABC"
 export const ORDER_WEIGHT = "ORDER_WEIGHT"
+export const UPDATE_TEMPERAMENTS = "UPDATE_TEMPERAMENTS"
 
-// 🟢 getAllDogs:
-// Esta función debe realizar una petición al Back-End. Luego despachar una action con la data recibida. End-Point: 'http://localhost:3001/dogs'.
 export const getAllDogs = (name) => {
     if (!name) {
         return function (dispatch) {
             return fetch('http://localhost:3001/dogs')
             .then((response) => response.json())
             .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-            }
+        }
     }
     else {
         return function (dispatch) {
@@ -27,25 +26,37 @@ export const getAllDogs = (name) => {
     }
 }
 
-export const getDogsForLocation = (location) => {
-    if (location === "API") {
-        return function (dispatch) {
-            return fetch(`http://localhost:3001/dogs?location=${location}`)
-            .then((response) => response.json())
-            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-            }
-    }
-    else if (location === "DB") {
-        return function (dispatch) {
-            return fetch(`http://localhost:3001/dogs?location=${location}`)
-            .then((response) => response.json())
-            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-            }
+export const getDogsForLocation = (location, dogs) => {
+    if (!dogs) {    
+        if (location === "API") {
+            return function (dispatch) {
+                return fetch(`http://localhost:3001/dogs?location=${location}`)
+                .then((response) => response.json())
+                .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
+                }
+        }
+        else if (location === "DB") {
+            return function (dispatch) {
+                return fetch(`http://localhost:3001/dogs?location=${location}`)
+                .then((response) => response.json())
+                .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
+                }
+        }
+    } else  {
+        let dogsFiltered
+        if (location === "API") {
+            dogsFiltered = dogs.filter(dog => {
+                return !dog.id.toString().includes("db")? true:null 
+            })
+        }
+        else if (location === "DB") {
+            dogsFiltered = dogs.filter(dog => {
+                return dog.id.toString().includes("db")? true:null 
+        })}
+        return { type: GET_ALL_DOGS, payload: dogsFiltered}
     }
 }
 
-// 🟢 getDogDetail:
-// Esta función debe hacer una petición al Back-End. Ten en cuenta que tiene que recibir la variable "id" por parámetro. Luego despachar una action con la data recibida. End-Point: 'http://localhost:3001/dogs/:idRaza'.
 export const getDogDetail = (id) => {
     return function (dispatch) {
         return fetch(`http://localhost:3001/dogs/${id}`)
@@ -58,37 +69,65 @@ export const cleanDetail = () => {
     return {type: CLEAN_DETAIL, payload:{}}
 }
 
-// 🟢 createDog: Esta función debe recibir una variable "dog" por parámetro. Luego retornar una action que, en su propiedad payload:
-//    - haga un spread operator de la variable dog, para copiar todo su contenido.
-
 export const createDog = (dog) => {
-    return {
-        type: CREATE_DOG,
-        payload: {...dog}
+    const newDog = {
+        method: 'Post',
+        headers: {
+            "Content-type": "application/json"
+        },
+        body: JSON.stringify(dog)
     }
+    return function (dispatch) {
+        return fetch(`http://localhost:3001/dogs`, newDog)
+        .then((data) => data.json())
+        .then((data) => dispatch({ type: GET_DOG_DETAILS, payload: data}));
+        }
 };
 
-export const getAllTemperaments= () => {
+export const getAllTemperaments = () => {
     return function (dispatch) {
         return fetch('http://localhost:3001/temperaments')
         .then((response) => response.json())
-        .then((data) => {dispatch({ type: GET_TEMPERAMENTS, payload: data})});
-        }
+        .then((data) => {
+            let arrayData = data.map(temperament => temperament.name)
+            dispatch({ type: GET_TEMPERAMENTS, payload: arrayData})
+        });
+    }
 }
 
-export const getDogsForTemperaments = (filter) => {
-    return function (dispatch) {
-        return fetch('http://localhost:3001/dogs')
-        .then((response) => response.json())
-        .then((data) => data.filter(dog => {
+export const updateTemperaments = () => {
+    return function(dispatch) {
+        return fetch(`http://localhost:3001/temperaments?add=update`, {method: "Post", headers: {"Content-type": "application/json"}})
+        .then(response => response.json())
+        .then(data => data.length?dispatch({type: UPDATE_TEMPERAMENTS, payload: data}):null)
+    }
+}
+
+export const getDogsForTemperaments = (filter, dogs) => {
+    if (!dogs) {
+        return function (dispatch) {
+            return fetch('http://localhost:3001/dogs')
+            .then((response) => response.json())
+            .then((data) => data.filter(dog => {
+                const temperamentsDog = dog.temperament? dog.temperament.split(", "):"null"
+                for (let temperamentFilter of filter) {
+                    if (temperamentsDog.includes(temperamentFilter)) continue
+                    else return false
+                }
+                return true
+            }))
+            .then((data) => {dispatch({ type: GET_DOGS_FOR_TEMPERAMENTS, payload: data})});
+        }
+    } else {
+        const dogsFiltered = dogs.filter(dog => {
             const temperamentsDog = dog.temperament? dog.temperament.split(", "):"null"
-            for (let temperamentFilter of filter) {
-                if (temperamentsDog.includes(temperamentFilter)) continue
-                else return false
-            }
-            return true
-        }))
-        .then((data) => {dispatch({ type: GET_DOGS_FOR_TEMPERAMENTS, payload: data})});
+                for (let temperamentFilter of filter) {
+                    if (temperamentsDog.includes(temperamentFilter)) continue
+                    else return false
+                }
+                return true
+        })
+        return {type: GET_DOGS_FOR_TEMPERAMENTS, payload: dogsFiltered }
     }
 }
 
