@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
     let dogsArrayApi = []
     let dogsArrayDB = []
     try {
-        if (location === "API" || location === undefined) {
+        if (location === "API" || location === undefined || location === "TD") {
             dogsArrayApi = await request({
                 uri: RUTA,
                 json: true
@@ -52,12 +52,12 @@ router.get("/", async (req, res) => {
                 image: dog.image.url
             })))
         }
-        if (location === "DB" || location === undefined) {
+        if (location === "DB" || location === undefined || location === "TD") {
                 dogsArrayDB = (await Dog.findAll({
                 attributes: {exclude: ["createdAt", "updatedAt"]},
                 include: Temperament
             })).map(dog => ({...dog.dataValues, 
-                temperaments: dog.temperaments.map(t => t.dataValues.name).join(", ")
+                temperament: dog.temperaments.map(t => t.dataValues.name).join(", ")
             }))
         }
        

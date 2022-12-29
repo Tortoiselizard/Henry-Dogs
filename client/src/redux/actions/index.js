@@ -8,41 +8,38 @@ export const ADD_TEMPERAMENT_FILTER = "ADD_TEMPERAMENT_FILTER"
 export const ORDER_ABC = "ORDER_ABC"
 export const ORDER_WEIGHT = "ORDER_WEIGHT"
 export const UPDATE_TEMPERAMENTS = "UPDATE_TEMPERAMENTS"
+export const KEE_DOGS = "KEE_DOGS"
+
+export const probando = () => {
+    return fetch('http://localhost:3001/dogs')
+        .then((response) => response.json())
+        .then((data) => ({ type: GET_ALL_DOGS, payload: data}))
+}
 
 export const getAllDogs = (name) => {
     if (!name) {
-        return function (dispatch) {
-            return fetch('http://localhost:3001/dogs')
+        return fetch('http://localhost:3001/dogs')
             .then((response) => response.json())
-            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-        }
+            .then((data) => ({ type: GET_ALL_DOGS, payload: data}));
+        
     }
     else {
-        return function (dispatch) {
-            return fetch(`http://localhost:3001/dogs?name=${name}`)
+        return fetch(`http://localhost:3001/dogs?name=${name}`)
             .then((response) => response.json())
-            .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-            }
+            .then((data) => ({ type: GET_ALL_DOGS, payload: data}));
+            
     }
 }
 
 export const getDogsForLocation = (location, dogs) => {
     if (!dogs) {    
-        if (location === "API") {
-            return function (dispatch) {
-                return fetch(`http://localhost:3001/dogs?location=${location}`)
-                .then((response) => response.json())
-                .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-                }
+        return function (dispatch) {
+            return fetch(`http://localhost:3001/dogs?location=${location}`)
+            .then((response) => response.json())
+            .then((data) => ({ type: GET_ALL_DOGS, payload: data}));
         }
-        else if (location === "DB") {
-            return function (dispatch) {
-                return fetch(`http://localhost:3001/dogs?location=${location}`)
-                .then((response) => response.json())
-                .then((data) => {dispatch({ type: GET_ALL_DOGS, payload: data})});
-                }
-        }
-    } else  {
+    } 
+    else  {
         let dogsFiltered
         if (location === "API") {
             dogsFiltered = dogs.filter(dog => {
@@ -55,12 +52,31 @@ export const getDogsForLocation = (location, dogs) => {
         })}
         return { type: GET_ALL_DOGS, payload: dogsFiltered}
     }
+    // let dogsFiltered
+    // if (!dogs) {    
+    //     dogsFiltered = await fetch(`http://localhost:3001/dogs?location=${location}`)
+    //         .then((response) => response.json())
+    //         .then((data) => data);
+    // } 
+    // else  {
+    //     if (location === "API") {
+    //         dogsFiltered = dogs.filter(dog => {
+    //             return !dog.id.toString().includes("db")? true:null 
+    //         })
+    //     }
+    //     else if (location === "DB") {
+    //         dogsFiltered = dogs.filter(dog => {
+    //             return dog.id.toString().includes("db")? true:null 
+    //     })}
+    //     return { type: GET_ALL_DOGS, payload: dogsFiltered}
+    // }
 }
 
 export const getDogDetail = (id) => {
     return function (dispatch) {
         return fetch(`http://localhost:3001/dogs/${id}`)
         .then((response) => response.json())
+        .then(data => data)
         .then((data) => dispatch({ type: GET_DOG_DETAILS, payload: data}));
         }
 };
@@ -116,7 +132,7 @@ export const getDogsForTemperaments = (filter, dogs) => {
                 }
                 return true
             }))
-            .then((data) => {dispatch({ type: GET_DOGS_FOR_TEMPERAMENTS, payload: data})});
+            .then((data) => ({ type: GET_DOGS_FOR_TEMPERAMENTS, payload: data}));
         }
     } else {
         const dogsFiltered = dogs.filter(dog => {
@@ -157,4 +173,8 @@ export const orderWeight = (data) => {
     //     else {return rangeA[1]-rangeB[1]}
     // })
     return {type: ORDER_WEIGHT, payload: data}
+}
+
+export const keepDogs = (dogs) => {
+    return {type: KEE_DOGS, payload: dogs}
 }

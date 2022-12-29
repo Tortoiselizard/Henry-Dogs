@@ -114,20 +114,20 @@ function Order() {
     }
 
     return <div>
-        <h3>Ordenar</h3>
-        <label for="inputOrderAbc">Alfaveticamente: </label>
+        <span>Ordenar por: </span>
         <input type="radio" name="inputOrder" value="abc" id="inputOrderAbc"></input>
-        <br></br>
-        <label for="inputOrderWeight">Por peso: </label>
+        <label for="inputOrderAbc">Alfaveticamente</label>
+        
         <input type="radio" name="inputOrder" value="weight" id="inputOrderWeight"></input>
-        <br></br>
-        <h5>Sentido: </h5>
-        <label form="inputOrderAsc">Ascendente</label>
+        <label for="inputOrderWeight">Peso</label>
+        
+        <span>Sentido: </span>
         <input type="radio" id="inputOrderAsc" name="inputOrderSence" value="asc"></input>
-        <br></br>
-        <label for="inputOrderDes">Descendente</label>
+        <label form="inputOrderAsc">Ascendente</label>
+    
         <input type="radio" id="inputOrderDes" name="inputOrderSence" value="des"></input>
-        <br></br>
+        <label for="inputOrderDes">Descendente</label>
+        
         <button onClick={orderDispatch}>Ordenar</button>
     </div>
 }

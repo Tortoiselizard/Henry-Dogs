@@ -13,12 +13,13 @@ function SearchDog() {
         setInput((input) => ({search: event.target.value}))
     }
 
-    function searchDispatch() {
-        dispatch(getAllDogs(input.search))
+    async function searchDispatch() {
+        const action = await getAllDogs(input.search)
+        dispatch(action)
     }
 
     return <div>
-        <input type="text" onChange={handleChange} value={input.search} placeholder="Search..."></input>
+        <input type="text" onChange={handleChange} value={input.search} placeholder="Search..." onKeyPress={(event) => {if (event.key === "Enter") searchDispatch()}}></input>
         <button onClick={searchDispatch}>Search</button>
     </div>
 }

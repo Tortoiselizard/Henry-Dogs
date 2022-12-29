@@ -1,15 +1,14 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
 import {updateTemperaments, getAllTemperaments} from "../../redux/actions/index"
+import {useDispatch} from "react-redux"
 
 function MainPage() {
 
     const dispatch = useDispatch()
-    const temperaments = useSelector(state => state.temperaments)
 
-    React.useEffect(async () => {
-        await dispatch(updateTemperaments())
+    React.useEffect(() => {
+        dispatch(updateTemperaments())
         dispatch(getAllTemperaments())
     }, [dispatch])
 

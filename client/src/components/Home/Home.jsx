@@ -1,37 +1,43 @@
 // import './home.css';
 import React, { Component } from 'react';
 import DogCard from "../DogCard/DogCard"
-import {useSelector} from "react-redux"
+import {useSelector, useDispatch} from "react-redux"
 import Filter from '../Filter/Filter';
 import Order from "../Order/Order"
+import * as actions from "../../redux/actions/index"
 
 function Home() {
-    const dogs = useSelector((state) => state.dogs)
+
     const [showDogs, setShowDogs] = React.useState({
         start:0,
         list:[]
     })
+    const dogsGlobalState = useSelector((state) => state.dogs)
+    const dispatch = useDispatch()
+
+    React.useEffect(async ()=> {
+        const action = await actions.getAllDogs()
+        dispatch(action)
+    }, [dispatch])
 
     React.useEffect(()=> {
-        // console.log("entre: ", showDogs)
         setShowDogs((showDogs) => ({
             ...showDogs,
-            list:dogs.slice(showDogs.start, showDogs.start+8)
+            list:dogsGlobalState.slice(showDogs.start, showDogs.start+8)
         }))
-        // console.log("en useEffect: " ,setShowDogs.list.length)
-    },[dogs, showDogs.start, showDogs.end])
+    },[dogsGlobalState, showDogs.start, showDogs.end])
 
     function changeDogs(event) {
         switch (event.target.name) {
             case "siguiente":
-                if (dogs.length>showDogs.start+8) {
+                if (dogsGlobalState.length>showDogs.start+8) {
                     setShowDogs(showDogs => ({
                         ...showDogs,
                         start: showDogs.start + 8,
                     
                     }))
                 }
-                // console.log("Siguiente: ", showDogs.list.length)
+                
                 break
             case "anterior":
                 if (showDogs.start - 8 >= 0) {
@@ -45,7 +51,7 @@ function Home() {
         }
         setShowDogs(showDogs => ({
             ...showDogs,
-            list: dogs.slice(showDogs.start, showDogs.start+9)
+            list: dogsGlobalState.slice(showDogs.start, showDogs.start+9)
         }))
     }
 
@@ -56,7 +62,7 @@ function Home() {
             <Order></Order>
             <br></br>
             {
-                dogs.length>1? <div>
+                dogsGlobalState.length>8? <div>
                 <button name='anterior' onClick={changeDogs}>Anterior</button>
                 <button name='siguiente' onClick={changeDogs}>Siguiente</button>
                 </div>:null
@@ -64,18 +70,18 @@ function Home() {
         </div>
         <div>
             {
-                showDogs.list.length && showDogs.list.map((dog, index) => <DogCard 
+                showDogs.list.length? showDogs.list.map((dog, index) => <DogCard 
                     name={dog.name}
                     image={dog.image}
                     temperament={dog.temperament}
                     weight={dog.weight}
                     id={dog.id}
                     key={dog.id}
-                />)
+                />): null
             }
         </div>
         {
-            dogs.length>1? <div>
+            dogsGlobalState.length>8? <div>
             <button name='anterior' onClick={changeDogs}>Anterior</button>
             <button name='siguiente' onClick={changeDogs}>Siguiente</button>
             </div>:null

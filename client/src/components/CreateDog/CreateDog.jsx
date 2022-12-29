@@ -42,7 +42,7 @@ function validate(inputs) {
     if (regexNumber.test(life_span.max)) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
     else if (life_span.max < 0) {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
 
-    if (!regexURL.test(image)) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
+    if (!regexURL.test(image) && image.length) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
 
     return errors
 }
@@ -104,7 +104,8 @@ const CreateDog = () => {
     }
 
     async function addTemperament() {
-        const temperament = document.getElementsByName("inputTemperament")["0"].value
+        const input = document.getElementsByName("inputTemperament")["0"]
+        const temperament = input.value
         if (temperamentsGS.includes(temperament)) {
             if (!inputs.temperaments.includes(temperament)) {
                 setInputs(inputs => ({
@@ -115,6 +116,7 @@ const CreateDog = () => {
                     ...errors,
                     temperaments: ""
                 }))
+                input.value=""
             }
             else {
                 setErrors(errors => ({
