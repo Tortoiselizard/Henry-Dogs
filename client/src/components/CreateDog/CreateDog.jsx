@@ -105,7 +105,7 @@ const CreateDog = () => {
 
     async function addTemperament() {
         const input = document.getElementsByName("inputTemperament")["0"]
-        const temperament = input.value
+        const temperament = input.value[0].toUpperCase() + input.value.slice(1).toLowerCase()
         if (temperamentsGS.includes(temperament)) {
             if (!inputs.temperaments.includes(temperament)) {
                 setInputs(inputs => ({
@@ -146,20 +146,20 @@ const CreateDog = () => {
 
     function handleSubmit(event) {
         event.preventDefault()
-        setErrors((errors) => validate(inputs))
         const errorsObj = validate(inputs)
+        setErrors(errors => errorsObj)
         let allGood = true
         for (let error in errorsObj) {
-            if (typeof(errorsObj.error)==="string") {
-                if (errorsObj.error.length) {
+            if (typeof(errorsObj[error])==="string") {
+                if (errorsObj[error].length) {
                     allGood=false
                 }
             }
-            else if (typeof(errorsObj.error)==="object") {
-                if (errorsObj.error.min.length) {
+            else if (typeof(errorsObj[error])==="object") {
+                if (errorsObj[error].min.length) {
                     allGood=false
                 }
-                if (errorsObj.error.max.length) {
+                if (errorsObj[error].max.length) {
                     allGood=false
                 }
             }
@@ -167,7 +167,9 @@ const CreateDog = () => {
         if (allGood) {
             const temperaments = inputs.temperaments.map(temperament => temperamentsGS.indexOf(temperament)+1)
             const newDog = {
-                    name: inputs.name,
+                    name: inputs.name.includes(" ")? 
+                        inputs.name.split(" ").map(nombre => nombre[0].toUpperCase() + nombre.slice(1).toLowerCase()).join(" "):
+                        inputs.name[0].toUpperCase() + inputs.name.slice(1).toLowerCase(),
                     height: inputs.height.min + (inputs.height.max? " - " + inputs.height.max:""),
                     weight: inputs.weight.min + (inputs.weight.max? " - " + inputs.weight.max:""),
                     life_span: inputs.life_span.min + (inputs.life_span.max? " - " + inputs.life_span.max:""),
@@ -182,7 +184,7 @@ const CreateDog = () => {
 
             fetch(`http://localhost:3001/dogs`, data)
                 .then((data) => data.json())
-                .then(data => {alert("La raza fue creada exitosamente")}).catch(data => {alert(data)});
+                .then(data => {alert("La raza fue creada exitosamente")}).catch(error => {alert(error.message)});
 
             setInputs((inputs) => ({
                 name:"",
@@ -263,7 +265,7 @@ const CreateDog = () => {
         <br/>
 
         <label>Temperamentos : </label>
-        <input name="inputTemperament" type="text" placeholder="temperamento..."></input>
+        <input name="inputTemperament" type="text" placeholder="temperamento..." onKeyPress={(event) => {if (event.key === "Enter") addTemperament()}}></input>
         <button onClick={addTemperament}>+</button>
         <p>{errors.temperaments}</p>
         <span>{inputs.temperaments.map((temperament, index) => <div key={index}>

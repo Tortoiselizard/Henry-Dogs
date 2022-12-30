@@ -10,11 +10,11 @@ export const ORDER_WEIGHT = "ORDER_WEIGHT"
 export const UPDATE_TEMPERAMENTS = "UPDATE_TEMPERAMENTS"
 export const KEE_DOGS = "KEE_DOGS"
 
-export const probando = () => {
-    return fetch('http://localhost:3001/dogs')
-        .then((response) => response.json())
-        .then((data) => ({ type: GET_ALL_DOGS, payload: data}))
-}
+// export const probando = () => {
+//     return fetch('http://localhost:3001/dogs')
+//         .then((response) => response.json())
+//         .then((data) => ({ type: GET_ALL_DOGS, payload: data}))
+// }
 
 export const getAllDogs = (name) => {
     if (!name) {
@@ -26,7 +26,14 @@ export const getAllDogs = (name) => {
     else {
         return fetch(`http://localhost:3001/dogs?name=${name}`)
             .then((response) => response.json())
-            .then((data) => ({ type: GET_ALL_DOGS, payload: data}));
+            .then((data) => { 
+                // console.log("lo que me retorno el servidor", data)
+                return {type: GET_ALL_DOGS, payload: data}
+            })
+            .catch(data => {
+                // console.log("en caso de no un error en el action-generator retorno", data)
+                return {payload: "Ha ocurrido un problema en el enlace con el servidor de la aplicación"}
+            });
             
     }
 }
@@ -72,13 +79,16 @@ export const getDogsForLocation = (location, dogs) => {
     // }
 }
 
-export const getDogDetail = (id) => {
+export const getDogDetail = (raza_perro) => {
     return function (dispatch) {
-        return fetch(`http://localhost:3001/dogs/${id}`)
+        return fetch(`http://localhost:3001/dogs/${raza_perro}`)
         .then((response) => response.json())
-        .then(data => data)
-        .then((data) => dispatch({ type: GET_DOG_DETAILS, payload: data}));
-        }
+        .then(data => {
+            if (typeof(data) === "string") {alert(data)}
+            else return dispatch({ type: GET_DOG_DETAILS, payload: data})
+        })
+        .catch(data => {alert("Ha ocurrido un problema en el enlace con el servidor de la aplicación")});
+    }
 };
 
 export const cleanDetail = () => {

@@ -7,20 +7,23 @@ function DogDetail() {
 
     const dogDetail = useSelector(state => state.dogDetail)
 
-    const {id} = useParams()
+    const {raza_perro} = useParams()
+    // const params = useParams()
+    // console.log(raza_perro)
     const dispatch = useDispatch()
 
     React.useEffect(()=> {
-        dispatch(getDogDetail(id))
+        // console.log(id)
+        dispatch(getDogDetail(raza_perro))
         return function() {
             dispatch(cleanDetail())
         }
-    },[id])
+    },[raza_perro])
 
     return <div>
         <h1>Estoy en el detalle del perro DogDetail</h1>
         {Object.keys(dogDetail).length?<div>
-            <p>{dogDetail.name}</p>
+            <h1>{dogDetail.name}</h1>
             <img src={dogDetail.image} alt={dogDetail.name}></img>
             <p>Temperaments: <span>{dogDetail.temperament}</span></p>
             <p>Height (cm): <span>{dogDetail.height}</span></p>
