@@ -10,9 +10,10 @@ router.get("/", async (req, res) => {
 
     try {
         const temperamentsArrayDB = await Temperament.findAll()
+        .catch(error => {throw new Error("Ha ocurrido un error en el enlace con la base de datos")})
         res.status(200).send(temperamentsArrayDB)      
     } catch(error) {
-        res.status(400).send(error.message)
+        res.status(400).json(error.message)
     }
 })
 
@@ -30,6 +31,7 @@ router.post("/", async (req, res) => {
                 uri: RUTA,
                 json: true
             }).then(data => data)
+            .catch(error => {throw new Error("Ha ocurrido un problema con el enlace al servidor de la API")})
         
             dogsArrayAPI.forEach(async (dog) => {
                 dog.temperament && dog.temperament.split(", ").forEach(temperament => {
@@ -46,7 +48,7 @@ router.post("/", async (req, res) => {
         res.status(200).json(newTemperamentsToCreate)
     }
     catch(error) {
-        res.status(400).send(error.message)
+        res.status(400).json(error.message)
     }
 })
 

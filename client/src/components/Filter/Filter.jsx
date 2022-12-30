@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs} from "../../redux/actions/index"
+import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments} from "../../redux/actions/index"
 
 function Filter() {
 
@@ -14,6 +14,7 @@ function Filter() {
     const globalState = useSelector(state => state)
 
     React.useEffect(() => {
+        dispatch(updateTemperaments())
         dispatch(getAllTemperaments())
     }, [dispatch])
 

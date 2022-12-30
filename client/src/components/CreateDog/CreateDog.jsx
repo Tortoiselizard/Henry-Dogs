@@ -36,11 +36,11 @@ function validate(inputs) {
     if (regexNumber.test(weight.max)) {errors.weight.max = "Debes escribir solo números en esta casilla"}
     else if (weight.max < 0) {errors.weight.max = "El peso máxima del perro no puede ser un número negativo"}
 
-    if (regexNumber.test(life_span.min)) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
-    else if (life_span.min <= 0) {errors.life_span.min = "Los años mínimos de vida del perro no puede ser un número negativo o cero"}
+    if (regexNumber.test(life_span.min) && life_span.length) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
+    else if (life_span.min < 0 || life_span.min === "0") {errors.life_span.min = "Los años mínimos de vida del perro no puede ser un número negativo o cero"}
 
-    if (regexNumber.test(life_span.max)) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
-    else if (life_span.max < 0) {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
+    if (regexNumber.test(life_span.max) && life_span.length) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
+    else if (life_span.max < 0 || life_span.max === "0") {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
 
     if (!regexURL.test(image) && image.length) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
 
@@ -144,7 +144,7 @@ const CreateDog = () => {
         })
     }
 
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
         const errorsObj = validate(inputs)
         setErrors(errors => errorsObj)
@@ -165,6 +165,8 @@ const CreateDog = () => {
             }
         }
         if (allGood) {
+            const action = await actions.getDogDetail(inputs.name)
+            if (typeof(action.payload) !== "string") {return alert(`La raza de perro ${action.payload.name} ya existe`)}
             const temperaments = inputs.temperaments.map(temperament => temperamentsGS.indexOf(temperament)+1)
             const newDog = {
                     name: inputs.name.includes(" ")? 
@@ -182,26 +184,30 @@ const CreateDog = () => {
                 body: JSON.stringify(newDog)
             }
 
-            fetch(`http://localhost:3001/dogs`, data)
+            const response = await fetch(`http://localhost:3001/dogs`, data)
                 .then((data) => data.json())
-                .then(data => {alert("La raza fue creada exitosamente")}).catch(error => {alert(error.message)});
-
-            setInputs((inputs) => ({
+                .then(data => data)
+                .catch(error => error.message);
+            if (typeof(response) === "string") {return alert(response)}
+            else {
+                alert(`La raza de perro ${inputs.name} fue creada exitosamente`)
+                setInputs((inputs) => ({
                 name:"",
                 height:{min:"", max:""},
                 weight:{min:"", max:""},
                 life_span:{min:"", max:""},
                 image:"",
                 temperaments:[]
-            }))
-            setErrors((errors) => ({
-                name:"",
-                height:{min:"", max:""},
-                weight:{min:"", max:""},
-                life_span:{min:"", max:""},
-                image:"",
-                temperaments:""
-            }))
+                }))
+                setErrors((errors) => ({
+                    name:"",
+                    height:{min:"", max:""},
+                    weight:{min:"", max:""},
+                    life_span:{min:"", max:""},
+                    image:"",
+                    temperaments:""
+                }))
+            }
         } else {
             alert("Debes corregir los errores antes de crear el nuevo perro")
         }

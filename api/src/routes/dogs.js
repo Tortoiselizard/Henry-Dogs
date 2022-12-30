@@ -29,7 +29,7 @@ router.post("/", async(req, res) => {
             throw new Error("Los atributos: name, height y weight no pueden ser nulos")
         }
     } catch(error) {
-        res.status(400).send(error.message)
+        res.status(400).json(error.message)
     }
 })
 
@@ -120,7 +120,7 @@ router.get("/:raza_perro", async(req, res) => {
             attributes: {exclude: ["createdAt", "updatedAt"]},
             include: Temperament
         }).catch(() => {throw new Error("Ha ocurrido un problema en el enlace con la base de datos de la aplicación")}))
-        
+        console.log(dogFindedDB)
         if (!dogFindedDB) {return res.status(202).send(`No se ha encontrado la raza de perro "${raza_perro}"`)}
         
         dogFindedDB = {...dogFindedDB.dataValues, 

@@ -7,9 +7,9 @@ function MainPage() {
 
     const dispatch = useDispatch()
 
-    React.useEffect(() => {
-        dispatch(updateTemperaments())
-        dispatch(getAllTemperaments())
+    React.useEffect(async () => {
+        await dispatch(updateTemperaments())
+        await dispatch(getAllTemperaments())
     }, [dispatch])
 
     return <div>

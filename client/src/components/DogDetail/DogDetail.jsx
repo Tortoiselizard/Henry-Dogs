@@ -12,9 +12,11 @@ function DogDetail() {
     // console.log(raza_perro)
     const dispatch = useDispatch()
 
-    React.useEffect(()=> {
+    React.useEffect(async ()=> {
         // console.log(id)
-        dispatch(getDogDetail(raza_perro))
+        const action = getDogDetail(raza_perro)
+        if (typeof(action.payload) === "string") {return alert(action.payload)}
+        dispatch(action)
         return function() {
             dispatch(cleanDetail())
         }

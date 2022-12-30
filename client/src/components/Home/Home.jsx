@@ -17,6 +17,7 @@ function Home() {
 
     React.useEffect(async ()=> {
         const action = await actions.getAllDogs()
+        if (typeof(action) === "string") {return alert(action)}
         dispatch(action)
     }, [dispatch])
 
