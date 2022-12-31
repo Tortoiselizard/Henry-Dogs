@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import DogCard from "../DogCard/DogCard"
 import {useSelector, useDispatch} from "react-redux"
+import SearchDog from '../SearchDog/SearchDog';
 import Filter from '../Filter/Filter';
 import Order from "../Order/Order"
 import * as actions from "../../redux/actions/index"
@@ -57,6 +58,7 @@ function Home() {
     }
 
     return <div>
+        <SearchDog></SearchDog>
         <h1>Elige a tu perro</h1>
         <div>
             <Filter></Filter>
