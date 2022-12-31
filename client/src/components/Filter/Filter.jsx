@@ -13,9 +13,9 @@ function Filter() {
     const dispatch = useDispatch()
     const globalState = useSelector(state => state)
 
-    React.useEffect(() => {
-        dispatch(updateTemperaments())
-        dispatch(getAllTemperaments())
+    React.useEffect(async () => {
+        await dispatch(updateTemperaments())
+        await dispatch(getAllTemperaments())
     }, [dispatch])
 
     function addTemperamentToFilter() {
