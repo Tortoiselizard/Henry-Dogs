@@ -28,12 +28,12 @@ module.exports = (sequelize) => {
     },
     life_span:{
       type: DataTypes.STRING,
-      set(value) {
-        this.setDataValue("life_span", value+" years")
-      }
+      // set(value) {
+      //   this.setDataValue("life_span", value+" years")
+      // }
     },
     image: {
       type: DataTypes.STRING
     }
-  })
+  }, {timestamps: false})
 };
