@@ -6,6 +6,7 @@ import SearchDog from '../SearchDog/SearchDog';
 import Filter from '../Filter/Filter';
 import Order from "../Order/Order"
 import * as actions from "../../redux/actions/index"
+import style from "./Home.module.css"
 
 function Home() {
 
@@ -57,21 +58,24 @@ function Home() {
         }))
     }
 
-    return <div>
-        <SearchDog></SearchDog>
-        <h1>Elige a tu perro</h1>
-        <div>
+    return <div className={style.Home}>
+
+        {/* <div className={style.Titulo}> 
+            <h1>Elige a tu perro</h1>
+        </div> */}
+
+        <div className={style.Filter}>
             <Filter></Filter>
             <Order></Order>
-            <br></br>
+        </div>
+
+        <div className={style.DogCards}>
             {
-                dogsGlobalState.length>8? <div>
-                <button name='anterior' onClick={changeDogs}>Anterior</button>
-                <button name='siguiente' onClick={changeDogs}>Siguiente</button>
+                dogsGlobalState.length>8? <div className={style.ContenedorBotones}>
+                <button className={style.botonesIzquierda} name='anterior' onClick={changeDogs}></button>
+                <button className={style.botonesDerecha} name='siguiente' onClick={changeDogs}></button>
                 </div>:null
             }
-        </div>
-        <div>
             {
                 showDogs.list.length? showDogs.list.map((dog, index) => <DogCard 
                     name={dog.name}
@@ -82,13 +86,14 @@ function Home() {
                     key={dog.id}
                 />): null
             }
+            {
+                dogsGlobalState.length>8? <div className={style.ContenedorBotones}>
+                <button className={style.botonesIzquierda} name='anterior' onClick={changeDogs}></button>
+                <button className={style.botonesDerecha} name='siguiente' onClick={changeDogs}></button>
+                </div>:null
+            }
         </div>
-        {
-            dogsGlobalState.length>8? <div>
-            <button name='anterior' onClick={changeDogs}>Anterior</button>
-            <button name='siguiente' onClick={changeDogs}>Siguiente</button>
-            </div>:null
-        }
+       
         
     </div>
 }
