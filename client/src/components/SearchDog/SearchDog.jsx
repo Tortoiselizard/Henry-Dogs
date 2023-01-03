@@ -1,6 +1,7 @@
 import React from "react";
 import {useDispatch} from "react-redux"
 import {getAllDogs} from "../../redux/actions/index"
+import style from "./SearchDog.module.css"
 
 function SearchDog() {
     const [input, setInput] = React.useState({
@@ -20,9 +21,9 @@ function SearchDog() {
         else {alert(action.payload)}
     }
 
-    return <div>
-        <input type="text" onChange={handleChange} value={input.search} placeholder="Search..." onKeyPress={(event) => {if (event.key === "Enter") searchDispatch()}}></input>
-        <button onClick={searchDispatch}>Search</button>
+    return <div className={style.SearchDog}>
+        <input type="text" onChange={handleChange} value={input.search} placeholder="Search..." onKeyPress={(event) => {if (event.key === "Enter") searchDispatch()}} className={style.input}></input>
+        <button onClick={searchDispatch} className={style.buttons}>🔍</button>
     </div>
 }
 
