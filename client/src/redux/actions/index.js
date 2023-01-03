@@ -1,3 +1,5 @@
+// import { response } from "../../../../api/src/app"
+
 export const GET_ALL_DOGS = "GET_ALL_DOGS"
 export const GET_DOG_DETAILS = "GET_DOG_DETAILS"
 export const CREATE_DOG = "CREATE_DOG"
@@ -83,11 +85,19 @@ export const getDogsForLocation = (location, dogs) => {
 }
 
 export const getDogDetail = (raza_perro) => {
-    return fetch(`http://localhost:3001/dogs/${raza_perro}`)
-        .then((response) => response.json())
-        .then(data => ({ type: GET_DOG_DETAILS, payload: data}))
-        .catch(error => ({ payload:"Ha ocurrido un problema en el enlace con el servidor de la aplicación"}));
-    
+    // return fetch(`http://localhost:3001/dogs/${raza_perro}`)
+    //     .then((response) => response.json())
+    //     .then(data => ({ type: GET_DOG_DETAILS, payload: data}))
+    //     .catch(error => ({ payload:"Ha ocurrido un problema en el enlace con el servidor de la aplicación"}));
+    return function(dispatch) {
+        fetch(`http://localhost:3001/dogs/${raza_perro}`)
+            .then((response) => response.json())
+            .then(data => {
+                if (typeof(data) === "string") {throw new Error(data)}
+                else {dispatch({type: GET_DOG_DETAILS, payload:data})}
+            })
+            .catch(error => alert(error.message))
+    }
 };
 
 export const cleanDetail = () => {
