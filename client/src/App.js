@@ -5,7 +5,7 @@ import Home from "./components/Home/Home.jsx"
 import DogDetail from "./components/DogDetail/DogDetail.jsx";
 import CreateDog from "./components/CreateDog/CreateDog";
 import Nav from './components/Nav/Nav.jsx'
-// import './App.css';
+import './App.css';
 
 function App() {
   const location = useLocation()
