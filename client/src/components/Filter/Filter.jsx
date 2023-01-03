@@ -1,6 +1,7 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
 import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments} from "../../redux/actions/index"
+import style from "./Filter.module.css"
 
 function Filter() {
 
@@ -122,6 +123,12 @@ function Filter() {
         // console.log(action)
         dispatch(keepDogs(action.payload))
 
+        setStateFilter((stateFilter) => ({
+            ...stateFilter,
+            temperamentsToFilter: []
+
+        }))
+
         // const arrayFiltered = [filterForTemperament, filterForLocation].reduce( async (acc, cur) => {
         //     console.log(acc.payload)
         //     const action = await cur(acc.payload)
@@ -161,62 +168,79 @@ function Filter() {
         }
     }
 
-    return <div>
-        <h3>Filtrar</h3>
-        {
-            stateFilter.temperamentsFiltered.length || stateFilter.locationToFilter?
-                <p>Se esta filtrando por: </p>  
-            :null
-        }
-        {
-            stateFilter.temperamentsFiltered.length?
-            <div>
-                <label>Temperamentos: </label>
-                {
-                    stateFilter.temperamentsFiltered.map((temperament, index) => 
-                    <div key={index}>
-                        <label>{temperament}</label>
-                        <button onClick={goBack} name={`buttonCloseFilteredT${index}`}>x</button>
-                    </div>)
-                }
-            </div>
-            :null
-        }
-        {
-            stateFilter.locationToFilter?
-            <div>
-                <label>Ubicacion: </label>
-                <label>{stateFilter.locationToFilter}</label>
-                <button onClick={goBack} name={`buttonCloseFilteredL${stateFilter.locationToFilter}`}>x</button>
-            </div>
-            :null
-        }
-        <label>Por temperamento: </label>
-        <input type="text" placeholder="escribe el temperamento..." name="inputFilter" onKeyPress={(event) => {if (event.key === "Enter") addTemperamentToFilter()}}></input>
-        <button onClick={addTemperamentToFilter}>+</button>
+    return <div className={style.Filter}>
+        <h3 className={style.titulo}>Filtrar</h3>
+        <div className={style.showFiltrado}>        
+            {
+                stateFilter.temperamentsFiltered.length || stateFilter.locationToFilter?
+                    <p>Se esta filtrando por: </p>  
+                :null
+            }
+            {
+                stateFilter.temperamentsFiltered.length?
+                <div>
+                    <label>Temperamentos: </label>
+                    <div className={style.divParaFiltrar}>
+                        {
+                            stateFilter.temperamentsFiltered.map((temperament, index) => 
+                            <div key={index} className={style.filtradoTemperamentos}>
+                                <label>{temperament}</label>
+                                <button onClick={goBack} name={`buttonCloseFilteredT${index}`} className={style.botonCancelarFiltrado}>x</button>
+                            </div>)
+                        }
+                    </div>
+                </div>
+                :null
+            }
+            {
+                stateFilter.locationToFilter?
+                <div>
+                    <label>Ubicacion: </label>
+                    <div className={style.filtradoTemperamentos}>
+                        <label>{stateFilter.locationToFilter}</label>
+                        <button className={style.botonCancelarFiltrado} onClick={goBack} name={`buttonCloseFilteredL${stateFilter.locationToFilter}`}>x</button>
+                    </div>
+                </div>
+                :null
+            }
+        </div>
 
-        <label>Por Ubicación: </label>
-        <input type="radio" name="inputFilterLocation" id="inputFilterForAPI" value="API"></input>
-        <label for="inputFilterForAPI">API </label>
+        <div className={style.addTemperament}>
+            <label>Por temperamento: </label>
+            <input className={style.inputAddTemperament} type="text" placeholder="temperamento..." name="inputFilter" onKeyPress={(event) => {if (event.key === "Enter") addTemperamentToFilter()}}></input>
+            <button onClick={addTemperamentToFilter} className={style.botonAddTemperament}>+</button>
+        </div>
 
-        <input type="radio" name="inputFilterLocation" id="inputFilterForDB" value="DB"></input>
-        <label for="inputFilterForDB">DB </label>
+        {
+            stateFilter.temperamentsToFilter.length?<label>Temeramentos para filtrar: </label>:null
+        }
+        <div className={style.divParaFiltrar}>
+            {   
+            stateFilter.temperamentsToFilter.length > 0? stateFilter.temperamentsToFilter.map((temperament, index) => <div key={index} className={style.filtradoTemperamentos}>
+                <label>{temperament}</label>
+                <button className={style.botonCancelarFiltrado} onClick={restTemperamentToFilter} name={`temperamentToFilter${index}`}>x</button>
+                </div>)
+                :null
+            }
+        </div>
+        <div className={style.place}>
+            <label>Por Ubicación: </label>
+            <div>
+                <input type="radio" name="inputFilterLocation" id="inputFilterForAPI" value="API"></input>
+                <span for="inputFilterForAPI">API </span>
+            </div>
+            <div>
+                <input type="radio" name="inputFilterLocation" id="inputFilterForDB" value="DB"></input>
+                <span for="inputFilterForDB">DB </span>
+            </div>
+        </div>
 
         {/* <input type="radio" name="inputFilterLocation" id="inputFilterForTD" value="TD"></input>
         <label for="inputFilterForTD">TODOS </label> */}
 
-        <button onClick={() => {filter()}}>Filtrar</button>
+        <button onClick={() => {filter()}} className={style.botonFiltrar}>Filtrar</button>
         <br/>
-        {
-            stateFilter.temperamentsToFilter.length?<label>Temeramentos para filtrar: </label>:null
-        }
-        {
-            stateFilter.temperamentsToFilter.length > 0? stateFilter.temperamentsToFilter.map((temperament, index) => <div key={index}>
-                <label>{temperament}</label>
-                <button onClick={restTemperamentToFilter} name={`temperamentToFilter${index}`}>x</button>
-                </div>)
-                :null
-        }
+        
     </div>
 }
 
