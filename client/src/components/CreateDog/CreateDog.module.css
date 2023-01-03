@@ -1,0 +1,132 @@
+.CreateDog{
+    background-color: #6d6875;
+    color: white;
+    padding: 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* align-self: center; */
+    width: 500px;
+    border-radius: 20px;
+    margin: 30px;
+    box-shadow: 0 0 20px black;
+}
+
+.seccioName{
+    display: grid;
+    grid-template-columns: 175px auto;
+    grid-template-rows: 25px auto;
+    width: 100%;
+    /* border: 2px solid white; */
+    margin: 5px;
+}
+.seccionName label{
+    padding: 0px;
+}
+
+.seccioName input{
+    width: 300px;
+}
+
+.seccioName p{
+    grid-column: 2/ span 1;
+}
+
+.secciones{
+    display: grid;
+    grid-template-columns: 75px 150px 75px 150px;
+    grid-template-rows: 30px auto auto;
+    /* align-items: flex-start; */
+    width: 100%;
+    /* flex-wrap: wrap; */
+    height: 80px;
+    margin: 5px;
+    /* align-items: baseline; */
+}
+
+.secciones label{
+    grid-column: 1/ span 4;
+}
+
+.secciones p{
+    grid-column: span 2;
+}
+
+/* .valoresSecciones{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    width: 100%;
+    
+} */
+
+.secconImagen{
+    display: flex;
+    flex-direction: column;
+}
+
+.secconImagen input{
+    width: 450px;
+}
+
+.seccionTemperamentos{
+    display: flex;
+    flex-direction: column;
+    height: 120px;
+}
+
+.seccionTemperamentos label{
+    width: 178px;
+}
+
+.seccionTemperamentos div{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.botonAddTemperament{
+    background-color: #90be6d;
+    border: 0px;
+    height: 28px;
+    width: 29px;
+}
+
+.botonCreateDog{
+    width: 102px;
+    height: 80px;
+    background-color: #6d6875;
+    border: 0px;
+    background-image: url("https://www.pngkey.com/png/full/125-1252358_dog-icon.png");
+    background-size: cover;
+    align-self: flex-end;
+    border-radius: 10px;
+    padding: 0px;
+}
+
+.divTemperamentoAnadido{
+    background-color: #e56b6f;
+    margin-left: 10px;
+    padding-left: 10px;
+}
+
+.botonCerrarTemperamento{
+    background-color: #dc2f02;
+    border: 0px;
+    height: 28px;
+}
+
+.danger {
+    font-size: 12px;
+    color: #f94144;
+    margin-left: 10px;
+    text-align: left;
+}
+
+.warning {
+    border: solid red 1px;
+    border-radius: 0.2em;
+}
+label{
+    height: 50px;
+}

@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import * as actions from "./../../redux/actions/index"
 import { useSelector } from 'react-redux';
+import style from "./CreateDog.module.css"
 
 const regexName = /[^A-Za-zÁ-Úá-úñ ]/
 const regexNumber = /[^0-9.]/
@@ -231,59 +232,85 @@ const CreateDog = () => {
         //     .then(data => {alert("La raza fue creada exitosamente")}).catch(data => {alert(data)});
     }
 
-    return <div>
-        <h1>Voy a crear un perro con CreateDog</h1>
-        <label>Nombre de la Raza : </label>
-        <input onChange={handleChange} value={inputs.name} name="name" type="text" placeholder="Escribe el nombre..."></input>
-        <p>{errors.name}</p>
-        <br/>
+    return <div className={style.CreateDog}>
+        <h1>Create a new dog</h1>
 
-        <label>Altura : </label>
-        <label>min (cm) : </label>
-        <input onChange={handleChange} value={inputs.height.min} name="height-min" type="text" placeholder="altura minima..."></input>
-        <p>{errors.height.min}</p>
-        <label>max (cm) : </label>
-        <input onChange={handleChange} value={inputs.height.max} name="height-max" type="text" placeholder="altura máxima..."></input>
-        <p>{errors.height.max}</p>
-        <br/>
-
-        <label>Peso : </label>
-        <label>min (kg) : </label>
-        <input onChange={handleChange} value={inputs.weight.min} name="weight-min" type="text" placeholder="peso minimo..."></input>
-        <p>{errors.weight.min}</p>
-        <label>max (kg) : </label>
-        <input onChange={handleChange} value={inputs.weight.max} name="weight-max" type="text" placeholder="peso minimo..."></input>
-        <p>{errors.weight.max}</p>
-        <br/>
-
-        <label>Años de vida</label>
-        <label>min :</label>
-        <input onChange={handleChange} value={inputs.life_span.min} name="life_span-min" type="text" placeholder="edad mínima..."></input>
-        <p>{errors.life_span.min}</p>
-        <label>max :</label>
-        <input onChange={handleChange} value={inputs.life_span.max} name="life_span-max" type="text" placeholder="edad máxima..."></input>
-        <p>{errors.life_span.max}</p>
-        <br/>
-
-        <label>Imagen : </label>
-        <input onChange={handleChange} value={inputs.image} name="image" type="text" placeholder="URL..."></input>
-        <p>{errors.image}</p>
-        <br/>
-
-        <label>Temperamentos : </label>
-        <input name="inputTemperament" type="text" placeholder="temperamento..." onKeyPress={(event) => {if (event.key === "Enter") addTemperament()}}></input>
-        <button onClick={addTemperament}>+</button>
-        <p>{errors.temperaments}</p>
-        <span>{inputs.temperaments.map((temperament, index) => <div key={index}>
-           
-            <label name={`temperamentAdded${index}`}>{temperament}</label>
-            <button onClick={popTemperament} name={`temperamentAdded${index}`}>x</button>
-        
+        <div className={style.seccioName}>
+            <label>Nombre de la Raza : </label>
+            <input className={errors.name && style.warning} onChange={handleChange} value={inputs.name} name="name" type="text" placeholder="Escribe el nombre..."></input>
+            
+            <p className={style.danger}>{errors.name}</p>
         </div>
-        )}</span>
-        <br/>
 
-        <button type="submit" onClick={handleSubmit}>Create new Dog</button>
+        <div className={style.secciones}>
+            <label>Altura : </label>
+            
+                <span>min (cm) : </span>
+                <input className={errors.height.min && "warning"} onChange={handleChange} value={inputs.height.min} name="height-min" type="text" placeholder="altura minima..."></input>
+                
+                <span>max (cm) : </span>
+                <input className={errors.height.max && "warning"} onChange={handleChange} value={inputs.height.max} name="height-max" type="text" placeholder="altura máxima..."></input>
+                
+                <p className={style.danger}>{errors.height.min}</p>
+                <p className={style.danger}>{errors.height.max}</p>
+           
+        </div>
+
+        <div className={style.secciones}>
+            <label>Peso : </label>
+          
+            <span>min (kg) : </span>
+            <input className={errors.weight.min && "warning"} onChange={handleChange} value={inputs.weight.min} name="weight-min" type="text" placeholder="peso minimo..."></input>
+            
+            <span>max (kg) : </span>
+            <input className={errors.weight.max && "warning"} onChange={handleChange} value={inputs.weight.max} name="weight-max" type="text" placeholder="peso minimo..."></input>
+            
+            <p className={style.danger}>{errors.weight.min}</p>
+            <p className={style.danger}>{errors.weight.max}</p>
+            
+        </div>
+
+        <div className={style.secciones}>
+            <label>Años de vida</label>
+           
+            <span>min :</span>
+            <input className={errors.life_span.min && "warning"} onChange={handleChange} value={inputs.life_span.min} name="life_span-min" type="text" placeholder="edad mínima..."></input>
+            
+            <span>max :</span>
+            <input className={errors.life_span.max && "warning"} onChange={handleChange} value={inputs.life_span.max} name="life_span-max" type="text" placeholder="edad máxima..."></input>
+            <br></br>
+
+            <p className={style.danger}>{errors.life_span.min}</p>
+            <p className={style.danger}>{errors.life_span.max}</p>
+           
+        </div>
+
+        <div className={style.secconImagen}>
+            <label>Imagen : </label>
+            <input onChange={handleChange} value={inputs.image} name="image" type="text" placeholder="URL..."></input>
+            <p className={style.danger}>{errors.image}</p>
+        </div>
+
+        <div className={style.seccionTemperamentos}>
+            <label >Temperamentos : </label>
+            <div>
+                <div>
+                    <input name="inputTemperament" type="text" placeholder="temperamento..." onKeyPress={(event) => {if (event.key === "Enter") addTemperament()}}></input>
+                    <button className={style.botonAddTemperament} onClick={addTemperament}>+</button>
+                </div>
+    
+                {
+                    inputs.temperaments.map((temperament, index) => <span key={index} className={style.divTemperamentoAnadido}>
+            
+                    <label name={`temperamentAdded${index}`}>{temperament}  </label>
+                    <button onClick={popTemperament} name={`temperamentAdded${index}`} className={style.botonCerrarTemperamento}>x</button>
+                </span>
+                    )
+                }
+            </div>
+        </div>
+
+        <button className={style.botonCreateDog} type="submit" onClick={handleSubmit}></button>
     </div>
 };
 
