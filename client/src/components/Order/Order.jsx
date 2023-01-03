@@ -1,6 +1,7 @@
 import React from "react";
 import {useSelector, useDispatch} from "react-redux"
 import {orderAlfabetic, orderWeight} from "../../redux/actions/index"
+import style from "./Order.module.css"
 
 const regNumber = /[^0-9. ]/
 
@@ -113,22 +114,27 @@ function Order() {
         }
     }
 
-    return <div>
-        <span>Ordenar por: </span>
-        <input type="radio" name="inputOrder" value="abc" id="inputOrderAbc"></input>
-        <label for="inputOrderAbc">Alfaveticamente</label>
-        
-        <input type="radio" name="inputOrder" value="weight" id="inputOrderWeight"></input>
-        <label for="inputOrderWeight">Peso</label>
-        
-        <span>Sentido: </span>
-        <input type="radio" id="inputOrderAsc" name="inputOrderSence" value="asc"></input>
+    return <div className={style.Order}>
+        <p>Ordenar por: </p>
+
+        <div>
+            <label for="inputOrderAbc">Alfaveticamente</label>
+            <input type="radio" name="inputOrder" value="abc" id="inputOrderAbc"></input>
+            <br></br>
+            <label for="inputOrderWeight">Peso</label>
+            <input type="radio" name="inputOrder" value="weight" id="inputOrderWeight"></input>
+        </div>
+
+        <div className={style.sentido}>
+        <p>Sentido: </p>
         <label form="inputOrderAsc">Ascendente</label>
-    
-        <input type="radio" id="inputOrderDes" name="inputOrderSence" value="des"></input>
+        <input type="radio" id="inputOrderAsc" name="inputOrderSence" value="asc"></input>
+        <br></br>
         <label for="inputOrderDes">Descendente</label>
+        <input type="radio" id="inputOrderDes" name="inputOrderSence" value="des"></input>
+        </div>
         
-        <button onClick={orderDispatch}>Ordenar</button>
+        <button onClick={orderDispatch} className={style.botonOrdenar}>Ordenar</button>
     </div>
 }
 
