@@ -12,7 +12,21 @@
     border-radius: 5px;
 }
 
-.buttons {
+.buttonToSearch {
     background-color: white;
     height: 37px;
+}
+
+.buttonSearchAll {
+    width: 100px;
+    height: 35px;
+    margin-right: 20px;
+    background-color: #4a4e69;
+    color: #ede0d4;
+    border-radius: 10px;
+}
+
+.buttonSearchAll:hover {
+    background-color: #f2e9e4;
+    color: #4a4e69;
 }

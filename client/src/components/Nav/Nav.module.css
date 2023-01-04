@@ -32,6 +32,7 @@
     width:50px;
     background-image: url("https://cdn-icons-png.flaticon.com/512/25/25694.png");
     background-size: cover;
+    /* background-color: #d4a373; */
     background-color: #edede9;
     border-radius: 50px;
     margin-right: 10px;
@@ -39,6 +40,10 @@
     /* background-position:center; */
     /* background-image: url('../../../img/home.png') */
     /* background-image: url("F:\cursos\Henry\CursoHenry\PI-Dogs-main\client\public\img\home.png"); */
+}
+
+.buttonHome:hover {
+    background-color: #9a8c98;;
 }
 
 .buttonDog {
@@ -50,4 +55,8 @@
     border-radius: 50px;
     margin-right: 10px;
     margin-left: 10px;
+}
+
+.buttonDog:hover{
+    background-color: #9a8c98;
 }

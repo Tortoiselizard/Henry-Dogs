@@ -127,7 +127,7 @@ function Order() {
 
         <div className={style.sentido}>
         <p>Sentido: </p>
-        <label form="inputOrderAsc">Ascendente</label>
+        <label for="inputOrderAsc">Ascendente</label>
         <input type="radio" id="inputOrderAsc" name="inputOrderSence" value="asc"></input>
         <br></br>
         <label for="inputOrderDes">Descendente</label>
