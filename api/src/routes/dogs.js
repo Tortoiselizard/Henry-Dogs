@@ -11,6 +11,8 @@ let idDog = 1
 
 router.post("/", async(req, res) => {
     const {name, height, weight, life_span, image, temperaments} = req.body
+    // console.log(name, height, weight)
+    // console.log(typeof(name), typeof(height), typeof(weight))
     try {
         if (name && height && weight) {
             const dog = await Dog.findAll({where: {name}})
@@ -29,6 +31,7 @@ router.post("/", async(req, res) => {
             throw new Error("Los atributos: name, height y weight no pueden ser nulos")
         }
     } catch(error) {
+        console.log("entre en error servidor")
         res.status(400).json(error.message)
     }
 })
