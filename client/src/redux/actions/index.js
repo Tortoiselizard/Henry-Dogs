@@ -20,13 +20,16 @@ export const KEE_DOGS = "KEE_DOGS"
 
 export const getAllDogs = (name) => {
     if (!name) {
-        return fetch('http://localhost:3001/dogs')
-            .then((response) => response.json())
-            .then((data) => {
-                if (typeof(data) === "string") {return data}
-                return { type: GET_ALL_DOGS, payload: data}
-            });
-        
+        return fetch(`http://localhost:3001/dogs`)
+            .then(data => data.json())
+            .then(data => {
+                if (typeof(data) === "string") {
+                    return ({payload: data})
+                }
+                else {
+                    return {type: GET_ALL_DOGS, payload:data}
+                }
+            })      
     }
     else {
         return fetch(`http://localhost:3001/dogs?name=${name}`)
@@ -112,11 +115,18 @@ export const createDog = (dog) => {
         },
         body: JSON.stringify(dog)
     }
-    return function (dispatch) {
-        return fetch(`http://localhost:3001/dogs`, newDog)
+    // return function (dispatch) {
+    //     return fetch(`http://localhost:3001/dogs`, newDog)
+    //     .then((data) => data.json())
+    //     .then((data) => dispatch({ type: GET_DOG_DETAILS, payload: data}));
+    //     }
+    return fetch(`http://localhost:3001/dogs`, newDog)
         .then((data) => data.json())
-        .then((data) => dispatch({ type: GET_DOG_DETAILS, payload: data}));
-        }
+        .then((data) => {
+            // console.log(data)
+            return {type: GET_DOG_DETAILS, payload: data}
+        })
+        .catch(error => alert(error.message));
 };
 
 export const getAllTemperaments = () => {
