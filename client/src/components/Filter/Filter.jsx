@@ -48,22 +48,22 @@ function Filter() {
     }
 
     async function filterForTemperament(listDogs, state) {
-        if (state.temperamentsToFilter.length>0) {
+        if (state.temperamentsFiltered.length>0) {
             const dogsToFilter = [...listDogs]
             if (dogsToFilter.length) {
-                const action = await getDogsForTemperaments(state.temperamentsToFilter, dogsToFilter)
+                const action = await getDogsForTemperaments(state.temperamentsFiltered, dogsToFilter)
                 // dispatch(action)
-                setStateFilter(state => ({
+                setStateFilter(() => ({
                     ...state,
-                    temperamentsFiltered: [...state.temperamentsToFilter]
+                    temperamentsFiltered: [...state.temperamentsFiltered]
                 }))
                 return action
             } 
-            const action = await getDogsForTemperaments(state.temperamentsToFilter)
+            const action = await getDogsForTemperaments(state.temperamentsFiltered)
             // dispatch(action)
-            setStateFilter(state => ({
+            setStateFilter(() => ({
                 ...state,
-                temperamentsFiltered: [...state.temperamentsToFilter]
+                temperamentsFiltered: [...state.temperamentsFiltered]
             }))
             return action
         }
@@ -227,18 +227,20 @@ function Filter() {
             <label>Por Ubicación: </label>
             <div>
                 <input type="radio" name="inputFilterLocation" id="inputFilterForAPI" value="API"></input>
-                <span for="inputFilterForAPI">API </span>
+                <label for="inputFilterForAPI">API </label>
             </div>
             <div>
                 <input type="radio" name="inputFilterLocation" id="inputFilterForDB" value="DB"></input>
-                <span for="inputFilterForDB">DB </span>
+                <label for="inputFilterForDB">DB </label>
             </div>
         </div>
 
         {/* <input type="radio" name="inputFilterLocation" id="inputFilterForTD" value="TD"></input>
         <label for="inputFilterForTD">TODOS </label> */}
 
-        <button onClick={() => {filter()}} className={style.botonFiltrar}>Filtrar</button>
+        <button onClick={() => {
+            console.log({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, stateFilter.temperamentsToFilter]})
+            filter({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}} className={style.botonFiltrar}>Filtrar</button>
         <br/>
         
     </div>

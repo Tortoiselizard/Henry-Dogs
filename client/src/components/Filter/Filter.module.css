@@ -43,6 +43,11 @@
     font-family: 'Comfortaa', cursive;
 }
 
+.botonFiltrar:hover{
+    background-color: #f2e9e4;
+    color: #4a4e69;
+}
+
 .botonAddTemperament{
     background-color: #90be6d;
     border: 0px;
