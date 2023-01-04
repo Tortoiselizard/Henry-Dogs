@@ -37,10 +37,10 @@ function validate(inputs) {
     if (regexNumber.test(weight.max)) {errors.weight.max = "Debes escribir solo números en esta casilla"}
     else if (weight.max < 0) {errors.weight.max = "El peso máxima del perro no puede ser un número negativo"}
 
-    if (regexNumber.test(life_span.min) && life_span.length) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
+    if (regexNumber.test(life_span.min) && life_span.min.length) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
     else if (life_span.min < 0 || life_span.min === "0") {errors.life_span.min = "Los años mínimos de vida del perro no puede ser un número negativo o cero"}
 
-    if (regexNumber.test(life_span.max) && life_span.length) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
+    if (regexNumber.test(life_span.max) && life_span.max.length) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
     else if (life_span.max < 0 || life_span.max === "0") {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
 
     if (!regexURL.test(image) && image.length) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
@@ -99,8 +99,7 @@ const CreateDog = () => {
                 })
             } else {
                 return validate({...inputs, [event.target.name]:event.target.value})
-            }
-            
+            }   
         })
     }
 
@@ -166,9 +165,18 @@ const CreateDog = () => {
             }
         }
         if (allGood) {
-            const action = await actions.getDogDetail(inputs.name)
-            if (typeof(action.payload) !== "string") {return alert(`La raza de perro ${action.payload.name} ya existe`)}
-            const temperaments = inputs.temperaments.map(temperament => temperamentsGS.indexOf(temperament)+1)
+            // const action = await actions.createDog(inputs.name)
+            // const action = await actions.createDog({
+            //     name: inputs.name,
+            //     height: inputs.height.min + " - " + inputs.height.max.length? " - " + inputs.height.max:"",
+            //     weight: inputs.weight.min + inputs.weight.max.length? " - " +  inputs.weight.max: "",
+            //     life_span: inputs.life_span.min + inputs.life_span.max.length? " - " + inputs.life_span.max: "",
+            //     image: inputs.image,
+            //     temperaments: inputs.temperaments.length? inputs.temperaments.join(", ") :null
+            // })
+            // // console.log( "la action payload es ",action.payload)
+            // if (typeof(action.payload) === "string") {return alert(`La raza de perro ${action.payload.name} ya existe`)}
+            // const temperaments = inputs.temperaments.map(temperament => temperamentsGS.indexOf(temperament)+1)
             const newDog = {
                     name: inputs.name.includes(" ")? 
                         inputs.name.split(" ").map(nombre => nombre[0].toUpperCase() + nombre.slice(1).toLowerCase()).join(" "):
@@ -176,7 +184,7 @@ const CreateDog = () => {
                     height: inputs.height.min + (inputs.height.max? " - " + inputs.height.max:""),
                     weight: inputs.weight.min + (inputs.weight.max? " - " + inputs.weight.max:""),
                     life_span: inputs.life_span.min + (inputs.life_span.max? " - " + inputs.life_span.max:""),
-                    temperaments: temperaments,
+                    temperaments: inputs.temperaments.join(", "),
                     image: inputs.image
             }
             const data = {
@@ -243,30 +251,30 @@ const CreateDog = () => {
         </div>
 
         <div className={style.secciones}>
-            <label>Altura : </label>
+            <label>Altura</label>
             
                 <span>min (cm) : </span>
-                <input className={errors.height.min && "warning"} onChange={handleChange} value={inputs.height.min} name="height-min" type="text" placeholder="altura minima..."></input>
+                <input className={errors.height.min && style.warning} onChange={handleChange} value={inputs.height.min} name="height-min" type="text" placeholder="altura minima..."></input>
                 
                 <span>max (cm) : </span>
-                <input className={errors.height.max && "warning"} onChange={handleChange} value={inputs.height.max} name="height-max" type="text" placeholder="altura máxima..."></input>
+                <input className={errors.height.max && style.warning} onChange={handleChange} value={inputs.height.max} name="height-max" type="text" placeholder="altura máxima..."></input>
                 
-                <p className={style.danger}>{errors.height.min}</p>
-                <p className={style.danger}>{errors.height.max}</p>
+                <p >{errors.height.min}</p>
+                <p >{errors.height.max}</p>
            
         </div>
 
         <div className={style.secciones}>
-            <label>Peso : </label>
+            <label>Peso</label>
           
             <span>min (kg) : </span>
-            <input className={errors.weight.min && "warning"} onChange={handleChange} value={inputs.weight.min} name="weight-min" type="text" placeholder="peso minimo..."></input>
+            <input className={errors.weight.min && style.warning} onChange={handleChange} value={inputs.weight.min} name="weight-min" type="text" placeholder="peso minimo..."></input>
             
             <span>max (kg) : </span>
-            <input className={errors.weight.max && "warning"} onChange={handleChange} value={inputs.weight.max} name="weight-max" type="text" placeholder="peso minimo..."></input>
+            <input className={errors.weight.max && style.warning} onChange={handleChange} value={inputs.weight.max} name="weight-max" type="text" placeholder="peso minimo..."></input>
             
-            <p className={style.danger}>{errors.weight.min}</p>
-            <p className={style.danger}>{errors.weight.max}</p>
+            <p >{errors.weight.min}</p>
+            <p >{errors.weight.max}</p>
             
         </div>
 
@@ -274,31 +282,31 @@ const CreateDog = () => {
             <label>Años de vida</label>
            
             <span>min :</span>
-            <input className={errors.life_span.min && "warning"} onChange={handleChange} value={inputs.life_span.min} name="life_span-min" type="text" placeholder="edad mínima..."></input>
+            <input className={errors.life_span.min && style.warning} onChange={handleChange} value={inputs.life_span.min} name="life_span-min" type="text" placeholder="edad mínima..."></input>
             
             <span>max :</span>
-            <input className={errors.life_span.max && "warning"} onChange={handleChange} value={inputs.life_span.max} name="life_span-max" type="text" placeholder="edad máxima..."></input>
-            <br></br>
+            <input className={errors.life_span.max && style.warning} onChange={handleChange} value={inputs.life_span.max} name="life_span-max" type="text" placeholder="edad máxima..."></input>
 
-            <p className={style.danger}>{errors.life_span.min}</p>
-            <p className={style.danger}>{errors.life_span.max}</p>
+
+            <p >{errors.life_span.min}</p>
+            <p >{errors.life_span.max}</p>
            
         </div>
 
         <div className={style.secconImagen}>
-            <label>Imagen : </label>
-            <input onChange={handleChange} value={inputs.image} name="image" type="text" placeholder="URL..."></input>
+            <label>Imagen</label>
+            <input className={errors.image && style.warning} onChange={handleChange} value={inputs.image} name="image" type="text" placeholder="URL..."></input>
             <p className={style.danger}>{errors.image}</p>
         </div>
 
         <div className={style.seccionTemperamentos}>
-            <label >Temperamentos : </label>
+            <label >Temperamentos</label>
+            
             <div>
-                <div>
-                    <input name="inputTemperament" type="text" placeholder="temperamento..." onKeyPress={(event) => {if (event.key === "Enter") addTemperament()}}></input>
-                    <button className={style.botonAddTemperament} onClick={addTemperament}>+</button>
-                </div>
-    
+                <input name="inputTemperament" type="text" placeholder="temperamento..." onKeyPress={(event) => {if (event.key === "Enter") addTemperament()}}></input>
+                <button className={style.botonAddTemperament} onClick={addTemperament}>+</button>
+            </div>
+            <div>
                 {
                     inputs.temperaments.map((temperament, index) => <span key={index} className={style.divTemperamentoAnadido}>
             

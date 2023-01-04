@@ -20,8 +20,9 @@
     /* border: 2px solid white; */
     margin: 5px;
 }
-.seccionName label{
+.seccioName label{
     padding: 0px;
+    height: 25px;
 }
 
 .seccioName input{
@@ -30,12 +31,18 @@
 
 .seccioName p{
     grid-column: 2/ span 1;
+    margin: 5px;
+    width: 300px;
 }
+
+/* pDerecho {
+
+} */
 
 .secciones{
     display: grid;
     grid-template-columns: 75px 150px 75px 150px;
-    grid-template-rows: 30px auto auto;
+    grid-template-rows: 25px 25px 25px;
     /* align-items: flex-start; */
     width: 100%;
     /* flex-wrap: wrap; */
@@ -46,10 +53,20 @@
 
 .secciones label{
     grid-column: 1/ span 4;
+    margin: 0px;
+    padding: 0px;
+    height: 25px;
 }
 
-.secciones p{
+.secciones p {
+    margin: 5px;
     grid-column: span 2;
+    width: 176px;
+    justify-self: end;
+}
+
+.secciones input{
+    margin-right: 40px;
 }
 
 /* .valoresSecciones{
@@ -63,26 +80,40 @@
 .secconImagen{
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 .secconImagen input{
     width: 450px;
 }
 
+.secconImagen label{
+    height: 30px;
+}
+
+.secconImagen p{
+    margin: 5px;
+    text-align: center;
+}
+
 .seccionTemperamentos{
     display: flex;
     flex-direction: column;
-    height: 120px;
+    align-items: center;
+    min-height: 175px;
+    width: 100%;
 }
 
 .seccionTemperamentos label{
     width: 178px;
+    height: 30px;
 }
 
 .seccionTemperamentos div{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    margin: 5px;
 }
 
 .botonAddTemperament{
@@ -95,19 +126,23 @@
 .botonCreateDog{
     width: 102px;
     height: 80px;
-    background-color: #6d6875;
+    background-color: #f2e9e4;
     border: 0px;
     background-image: url("https://www.pngkey.com/png/full/125-1252358_dog-icon.png");
     background-size: cover;
-    align-self: flex-end;
+    /* align-self: flex-end; */
     border-radius: 10px;
     padding: 0px;
 }
 
+.botonCreateDog:hover{
+    background-color: #9a8c98;
+}
+
 .divTemperamentoAnadido{
     background-color: #e56b6f;
-    margin-left: 10px;
-    padding-left: 10px;
+    margin: 5px;
+    
 }
 
 .botonCerrarTemperamento{
@@ -123,10 +158,14 @@
     text-align: left;
 }
 
+.CreateDog p{
+    font-size: 12px;
+    color: #f94144;
+    /* margin-left: 10px;
+    text-align: left; */
+}
+
 .warning {
     border: solid red 1px;
     border-radius: 0.2em;
-}
-label{
-    height: 50px;
 }
