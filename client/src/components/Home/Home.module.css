@@ -21,6 +21,8 @@
     background-color: #6d6875;
     font-family: 'Comfortaa', cursive;
     color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 20px black;
 }
 
 .DogCards {

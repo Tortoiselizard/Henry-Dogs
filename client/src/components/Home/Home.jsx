@@ -17,11 +17,11 @@ function Home() {
     const dogsGlobalState = useSelector((state) => state.dogs)
     const dispatch = useDispatch()
 
-    React.useEffect(async ()=> {
-        const action = await actions.getAllDogs()
-        if (typeof(action) === "string") {return alert(action)}
-        dispatch(action)
-    }, [dispatch])
+    // React.useEffect(async ()=> {
+    //     const action = await actions.getAllDogs()
+    //     if (typeof(action) === "string") {return alert(action)}
+    //     dispatch(action)
+    // }, [dispatch])
 
     React.useEffect(()=> {
         setShowDogs((showDogs) => ({
@@ -67,8 +67,8 @@ function Home() {
         <div className={style.Filter}>
             <Filter></Filter>
             <Order></Order>
+                    
         </div>
-
         <div className={style.DogCards}>
             {
                 dogsGlobalState.length>8? <div className={style.ContenedorBotones}>
