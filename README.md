@@ -29,9 +29,8 @@ Crear una aplicación web donde se pueda encontrar diferentes razas de perro y s
 DB_USER=usuariodepostgres
 DB_PASSWORD=passwordPostgres
 DB_HOST=localhost:5432
-```
 YOUR_API_KEY = yourApiKey
-
+```
 Reemplazar `usuariodepostgres` y `passwordPostgres` con tus propias credenciales para conectarte a postgres.
 
 ## Instalación
