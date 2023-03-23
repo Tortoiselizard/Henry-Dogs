@@ -29,7 +29,7 @@ function validate(inputs) {
 
     if (regexNumber.test(height.max)) {errors.height.max = "Debes escribir solo números en esta casilla"}
     else if (height.max < 0) {errors.height.max = "La altura máxima del perro no puede ser un número negativo"}
-    else if (height.max!=="" && height.min >= height.max) {errors.height.max = "La altura máxima no puede ser menor o igual a la altura máxima"}
+    else if (height.max!=="" && height.min >= height.max) {errors.height.max = "La altura máxima no puede ser menor o igual a la altura mínima"}
 
     if (!weight.min) {errors.weight.min = "Este espacio no puede estar vacio"}
     else if (regexNumber.test(weight.min)) {errors.weight.min = "Debes escribir solo números en esta casilla"}
@@ -37,6 +37,7 @@ function validate(inputs) {
 
     if (regexNumber.test(weight.max)) {errors.weight.max = "Debes escribir solo números en esta casilla"}
     else if (weight.max < 0) {errors.weight.max = "El peso máxima del perro no puede ser un número negativo"}
+    else if (weight.max!=="" && weight.min >= weight.max) {errors.weight.max = "El peso máximo no puede ser menor o igual al peso mínimo"}
 
     if (regexNumber.test(life_span.min) && life_span.min.length) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
     else if (life_span.min < 0 || life_span.min === "0") {errors.life_span.min = "Los años mínimos de vida del perro no puede ser un número negativo o cero"}
