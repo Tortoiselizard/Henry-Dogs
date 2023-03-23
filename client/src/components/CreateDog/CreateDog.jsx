@@ -29,7 +29,7 @@ function validate(inputs) {
 
     if (regexNumber.test(height.max)) {errors.height.max = "Debes escribir solo números en esta casilla"}
     else if (height.max < 0) {errors.height.max = "La altura máxima del perro no puede ser un número negativo"}
-    else if (height.max!=="" && height.min >= height.max) {errors.height.max = "La altura máxima no puede ser menor o igual a la altura mínima"}
+    else if (height.max!=="" && Number(height.min) >= Number(height.max)) {errors.height.max = "La altura máxima no puede ser menor o igual a la altura mínima"}
 
     if (!weight.min) {errors.weight.min = "Este espacio no puede estar vacio"}
     else if (regexNumber.test(weight.min)) {errors.weight.min = "Debes escribir solo números en esta casilla"}
@@ -37,14 +37,14 @@ function validate(inputs) {
 
     if (regexNumber.test(weight.max)) {errors.weight.max = "Debes escribir solo números en esta casilla"}
     else if (weight.max < 0) {errors.weight.max = "El peso máxima del perro no puede ser un número negativo"}
-    else if (weight.max!=="" && weight.min >= weight.max) {errors.weight.max = "El peso máximo no puede ser menor o igual al peso mínimo"}
+    else if (weight.max!=="" && Number(weight.min) >= Number(weight.max)) {errors.weight.max = "El peso máximo no puede ser menor o igual al peso mínimo"}
 
     if (regexNumber.test(life_span.min) && life_span.min.length) {errors.life_span.min = "Debes escribir solo números en esta casilla"}
     else if (life_span.min < 0 || life_span.min === "0") {errors.life_span.min = "Los años mínimos de vida del perro no puede ser un número negativo o cero"}
 
     if (regexNumber.test(life_span.max) && life_span.max.length) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
     else if (life_span.max < 0 || life_span.max === "0") {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
-    else if (life_span.max!=="" && life_span.min >= life_span.max) {errors.life_span.max = "La edad máxima no puede ser menor o igual a la edad mínima"}
+    else if (life_span.max!=="" && Number(life_span.min) >= Number(life_span.max)) {errors.life_span.max = "La edad máxima no puede ser menor o igual a la edad mínima"}
 
     if (!regexURL.test(image) && image.length) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
 
