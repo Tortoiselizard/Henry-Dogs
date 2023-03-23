@@ -29,6 +29,7 @@ function validate(inputs) {
 
     if (regexNumber.test(height.max)) {errors.height.max = "Debes escribir solo números en esta casilla"}
     else if (height.max < 0) {errors.height.max = "La altura máxima del perro no puede ser un número negativo"}
+    else if (height.max!=="" && height.min >= height.max) {errors.height.max = "La altura máxima no puede ser menor o igual a la altura máxima"}
 
     if (!weight.min) {errors.weight.min = "Este espacio no puede estar vacio"}
     else if (regexNumber.test(weight.min)) {errors.weight.min = "Debes escribir solo números en esta casilla"}
