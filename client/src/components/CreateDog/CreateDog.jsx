@@ -44,6 +44,7 @@ function validate(inputs) {
 
     if (regexNumber.test(life_span.max) && life_span.max.length) {errors.life_span.max = "Debes escribir solo números en esta casilla"}
     else if (life_span.max < 0 || life_span.max === "0") {errors.life_span.max = "Los años máximos de vida del perro no puede ser un número negativo"}
+    else if (life_span.max!=="" && life_span.min >= life_span.max) {errors.life_span.max = "La edad máxima no puede ser menor o igual a la edad mínima"}
 
     if (!regexURL.test(image) && image.length) {errors.image = "Debe corresponder a una URL que comieza con https:// y termine con . seguido de cualquier formato de imagen"}
 
