@@ -6,7 +6,7 @@ import style from "./CreateDog.module.css"
 
 const regexName = /[^A-Za-zÁ-Úá-úñ ]/
 const regexNumber = /[^0-9.]/
-const regexURL = /^https:\/\/[^\0]+\.[a-z]{3}\b/
+const regexURL = /^https:\/\/[^\0]+\.jpg|png$/
 
 function validate(inputs) {
     const errors = {
