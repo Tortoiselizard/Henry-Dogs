@@ -49,8 +49,8 @@ router.get("/", async (req, res) => {
             }).then(data => data.map(dog => ({
                 id: dog.id,
                 name: dog.name,
-                height: dog.height.metric,
-                weight: dog.weight.metric,
+                height: dog.height.imperial,
+                weight: dog.weight.imperial,
                 life_span: dog.life_span,
                 temperament: dog.temperament,
                 image: dog.image.url
