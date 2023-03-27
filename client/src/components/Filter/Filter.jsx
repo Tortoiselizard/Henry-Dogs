@@ -83,14 +83,14 @@ function Filter() {
         // console.log(inputChecked)
         if (inputChecked !== undefined) {
             const dogsToFilter = [...listDogs]
+            setStateFilter(state => ({
+                ...state,
+                locationToFilter: inputChecked.value
+            }))
             if (dogsToFilter.length) {
                 const action = await getDogsForLocation(inputChecked.value, dogsToFilter)
                 // console.log(action)
                 // dispatch(action)
-                setStateFilter(state => ({
-                    ...state,
-                    locationToFilter: inputChecked.value
-                }))
                 return action
             } 
         }
@@ -102,7 +102,7 @@ function Filter() {
 
     async function filter(state = stateFilter, dogsGS = globalState.dogs) {
         // console.log("entre en filtrar")
-        // console.log(state)
+        console.log(state)
         // console.log(dogsGS)
         // const listDogs = await getAllDogs()
         // console.log(listDogs)
@@ -238,9 +238,9 @@ function Filter() {
         {/* <input type="radio" name="inputFilterLocation" id="inputFilterForTD" value="TD"></input>
         <label for="inputFilterForTD">TODOS </label> */}
 
-        <button onClick={() => {
-            console.log({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, stateFilter.temperamentsToFilter]})
-            filter({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}} className={style.botonFiltrar}>Filtrar</button>
+        <button className={style.botonFiltrar} onClick={() => {
+            // console.log({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, stateFilter.temperamentsToFilter]})
+            filter({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}}>Filtrar</button>
         <br/>
         
     </div>
