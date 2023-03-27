@@ -3,7 +3,7 @@ import {useSelector, useDispatch} from "react-redux"
 import {orderAlfabetic, orderWeight} from "../../redux/actions/index"
 import style from "./Order.module.css"
 
-const regNumber = /[^0-9. ]/
+const regNumber = /[^0-9-. ]/
 
 function Order() {
 
