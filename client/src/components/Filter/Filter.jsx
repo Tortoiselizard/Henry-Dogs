@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments} from "../../redux/actions/index"
+import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments, updateFilters} from "../../redux/actions/index"
 import style from "./Filter.module.css"
 
 function Filter() {
@@ -53,56 +53,47 @@ function Filter() {
             if (dogsToFilter.length) {
                 const action = await getDogsForTemperaments(state.temperamentsFiltered, dogsToFilter)
                 // dispatch(action)
-                setStateFilter(() => ({
-                    ...state,
-                    temperamentsFiltered: [...state.temperamentsFiltered]
-                }))
-                return action
+                return [action, state]
             } 
-            const action = await getDogsForTemperaments(state.temperamentsFiltered)
-            // dispatch(action)
-            setStateFilter(() => ({
-                ...state,
-                temperamentsFiltered: [...state.temperamentsFiltered]
-            }))
-            return action
+            return [{payload: listDogs}, state]
         }
         // setStateFilter(state => ({...state}))
         // dispatch(keepDogs(listDogs))
         // console.log(listDogs)
-        return {payload: listDogs}
+        return [{payload: listDogs}, state]
     }
 
     async function filterForLocation(listDogs, state) {
         // console.log(state)
         // console.log(listDogs)
+        const dogsToFilter = [...listDogs]
         const inputsLocation = document.getElementsByName("inputFilterLocation")
         // console.log(inputsLocation)
         let inputChecked
         inputsLocation.forEach(input => {if (input.checked) inputChecked = input})
         // console.log(inputChecked)
         if (inputChecked !== undefined) {
-            const dogsToFilter = [...listDogs]
-            setStateFilter(state => ({
+            state = {
                 ...state,
                 locationToFilter: inputChecked.value
-            }))
+            }
             if (dogsToFilter.length) {
                 const action = await getDogsForLocation(inputChecked.value, dogsToFilter)
                 // console.log(action)
                 // dispatch(action)
-                return action
-            } 
+                return [action, state]
+            }
+            return [{payload: listDogs}, state]
         }
         // setStateFilter(state => ({...state}))
         // console.log("no entre en el inputChecked y retorno todo el listDogs")
         // dispatch(keepDogs(listDogs))
-        return {payload: listDogs}
+        return [{payload: listDogs}, state]
     }
 
-    async function filter(state = stateFilter, dogsGS = globalState.dogs) {
+    async function filter(state = stateFilter, dogsGS = globalState.totaDogs) {
         // console.log("entre en filtrar")
-        console.log(state)
+        // console.log(state)
         // console.log(dogsGS)
         // const listDogs = await getAllDogs()
         // console.log(listDogs)
@@ -115,19 +106,14 @@ function Filter() {
 
         const arrayFilter = [filterForTemperament, filterForLocation]
         let action
-        for (let i=0, acc={payload: dogsGS}; i<arrayFilter.length; i++) {
-            const listDogsFiltered = await arrayFilter[i](acc.payload, state)
+        for (let i=0, acc=[{payload: dogsGS}, state]; i<arrayFilter.length; i++) {
+            const listDogsFiltered = await arrayFilter[i](acc[0].payload, acc[1])
             acc = listDogsFiltered
             action = acc
         }
-        // console.log(action)
-        dispatch(keepDogs(action.payload))
-
-        setStateFilter((stateFilter) => ({
-            ...stateFilter,
-            temperamentsToFilter: []
-
-        }))
+        dispatch(keepDogs(action[0].payload))
+        dispatch(updateFilters(action[1]))
+        setStateFilter(action[1])
 
         // const arrayFiltered = [filterForTemperament, filterForLocation].reduce( async (acc, cur) => {
         //     console.log(acc.payload)
@@ -239,8 +225,7 @@ function Filter() {
         <label for="inputFilterForTD">TODOS </label> */}
 
         <button className={style.botonFiltrar} onClick={() => {
-            // console.log({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, stateFilter.temperamentsToFilter]})
-            filter({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}}>Filtrar</button>
+            filter({...stateFilter, temperamentsToFilter:[], temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}}>Filtrar</button>
         <br/>
         
     </div>
