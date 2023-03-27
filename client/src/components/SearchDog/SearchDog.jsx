@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch} from "react-redux"
-import {getAllDogs} from "../../redux/actions/index"
+import {getAllDogs, keepDogs} from "../../redux/actions/index"
 import { useLocation } from "react-router-dom";
 import style from "./SearchDog.module.css"
 
@@ -25,7 +25,10 @@ function SearchDog() {
     async function showAllDogs(){
         const allDogs = await getAllDogs()
         if (typeof(allDogs.payload)=== "string") {return alert(allDogs.payload)}
-        else {return dispatch(allDogs)}
+        else {
+            await dispatch(allDogs)
+            await dispatch(keepDogs(allDogs.payload))
+        }
     }
 
     return <div className={style.SearchDog}>
