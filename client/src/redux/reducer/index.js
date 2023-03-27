@@ -2,6 +2,7 @@ import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENT
 
 const initialState = {
     dogs: [],
+    filters: {},
     dogDetail: {},
     temperaments: []
 }
