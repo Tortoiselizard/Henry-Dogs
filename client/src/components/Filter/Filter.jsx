@@ -129,14 +129,12 @@ function Filter() {
     async function goBack(event) {
         const actionAllDogs = await getAllDogs()
         const dogsGS = actionAllDogs.payload
-        // console.log(dogsGS)
         const buttonCloseFiltered = event.target.name.slice(19)
         if (buttonCloseFiltered[0]==="T") {
             const newTemperamentsFiltered = [...stateFilter.temperamentsFiltered]
             newTemperamentsFiltered.splice(buttonCloseFiltered.slice(1),1)
             const newState = {
                 ...stateFilter,
-                temperamentsToFilter: newTemperamentsFiltered ,
                 temperamentsFiltered: newTemperamentsFiltered
             }
             setStateFilter(state=> newState)
