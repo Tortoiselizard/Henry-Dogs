@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch} from "react-redux"
-import {getAllDogs, keepDogs} from "../../redux/actions/index"
+import {getAllDogs, keepDogs, updateSearchBar} from "../../redux/actions/index"
 import { useLocation } from "react-router-dom";
 import style from "./SearchDog.module.css"
 
@@ -17,7 +17,10 @@ function SearchDog() {
 
     async function searchDispatch() {
         const action = await getAllDogs(input.search)
-        if (Array.isArray(action.payload)) {dispatch(keepDogs(action.payload))}
+        if (Array.isArray(action.payload)) {
+            dispatch(keepDogs(action.payload))
+            dispatch(updateSearchBar(input.search))
+        }
         else {alert(action.payload)}
     }
     
