@@ -8,6 +8,7 @@ function Filter() {
     const globalState = useSelector(state => state)
     
     const [stateFilter, setStateFilter] = React.useState( (Object.keys(globalState.filters).length && globalState.filters) || {
+        searchBar: "rata",
         temperamentsToFilter: [],
         temperamentsFiltered: [],
         locationToFilter:""
@@ -20,6 +21,13 @@ function Filter() {
         await dispatch(getAllTemperaments())
         changeInputChecked()
     }, [dispatch])
+
+    React.useEffect(() => {
+        setStateFilter(stateFilter => ({
+            ...stateFilter,
+            searchBar: globalState.filters.searchBar
+        }))
+    }, [globalState])
 
     function addTemperamentToFilter() {
         const input = document.getElementsByName("inputFilter")
@@ -167,6 +175,15 @@ function Filter() {
     }
 
     return <div className={style.Filter}>
+        {
+            stateFilter.searchBar?
+            <div>
+                <h3 className={style.titulo}>Busqueda</h3>
+                {
+                    <label>{stateFilter.searchBar}</label>
+                }
+            </div>:null
+        }
         <h3 className={style.titulo}>Filtrar</h3>
         <div className={style.showFiltrado}>        
             {
