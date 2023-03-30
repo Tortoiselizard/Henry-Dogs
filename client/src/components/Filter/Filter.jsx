@@ -5,18 +5,20 @@ import style from "./Filter.module.css"
 
 function Filter() {
 
-    const [stateFilter, setStateFilter] = React.useState({
+    const globalState = useSelector(state => state)
+    
+    const [stateFilter, setStateFilter] = React.useState( (Object.keys(globalState.filters).length && globalState.filters) || {
         temperamentsToFilter: [],
         temperamentsFiltered: [],
         locationToFilter:""
     })
     
     const dispatch = useDispatch()
-    const globalState = useSelector(state => state)
 
     React.useEffect(async () => {
         await dispatch(updateTemperaments())
         await dispatch(getAllTemperaments())
+        changeInputChecked()
     }, [dispatch])
 
     function addTemperamentToFilter() {
@@ -152,6 +154,18 @@ function Filter() {
             setStateFilter(state=> newState)
             filter(newState, dogsGS)
         }
+    }
+
+    function changeInputChecked() {
+        var input
+        if (stateFilter.locationToFilter === "API") {
+            input = document.querySelector("#inputFilterForAPI")
+        }
+        else if (stateFilter.locationToFilter === "DB") {
+            input = document.querySelector("#inputFilterForDB")
+        }
+        else return
+        input.checked=true
     }
 
     return <div className={style.Filter}>
