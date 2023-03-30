@@ -17,8 +17,7 @@ function SearchDog() {
 
     async function searchDispatch() {
         const action = await getAllDogs(input.search)
-        // console.log("esto es lo que retorno el action-generator", action)
-        if (Array.isArray(action.payload)) {dispatch(action)}
+        if (Array.isArray(action.payload)) {dispatch(keepDogs(action.payload))}
         else {alert(action.payload)}
     }
     
