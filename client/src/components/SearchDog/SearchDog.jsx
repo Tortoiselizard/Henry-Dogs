@@ -22,6 +22,7 @@ function SearchDog() {
             dispatch(updateSearchBar(input.search))
         }
         else {alert(action.payload)}
+        setInput({search:""})
     }
     
     async function showAllDogs(){
