@@ -1,6 +1,6 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {getAllDogs, keepDogs, updateSearchBar, updateFilters} from "../../redux/actions/index"
+import {getAllDogs, keepDogs, updateSearchBar, updateFilters, updateOrder} from "../../redux/actions/index"
 import { useLocation } from "react-router-dom";
 import style from "./SearchDog.module.css"
 
@@ -26,6 +26,10 @@ function SearchDog() {
                 temperamentsFiltered: [],
                 locationToFilter:""
             }))
+            await dispatch(updateOrder({
+                type: "",
+                sense: "",
+            }))
         }
         else {alert(action.payload)}
         setInput({search:""})
@@ -39,6 +43,10 @@ function SearchDog() {
                 temperamentsToFilter: [],
                 temperamentsFiltered: [],
                 locationToFilter:""
+            }))
+            await dispatch(updateOrder({
+                type: "",
+                sense: "",
             }))
         } else {
             const allDogs = await getAllDogs()
