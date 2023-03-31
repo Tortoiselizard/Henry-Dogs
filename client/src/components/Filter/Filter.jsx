@@ -113,9 +113,9 @@ function Filter() {
             acc = listDogsFiltered
             action = acc
         }
-        dispatch(keepDogs(action[0].payload))
-        dispatch(updateFilters(action[1]))
         setStateFilter(action[1])
+        dispatch(updateFilters(action[1]))
+        dispatch(keepDogs(action[0].payload))
 
         // const arrayFiltered = [filterForTemperament, filterForLocation].reduce( async (acc, cur) => {
         //     console.log(acc.payload)
