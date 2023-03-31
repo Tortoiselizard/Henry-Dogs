@@ -1,6 +1,6 @@
 import React from "react";
-import {useDispatch} from "react-redux"
-import {getAllDogs, keepDogs, updateSearchBar} from "../../redux/actions/index"
+import {useDispatch, useSelector} from "react-redux"
+import {getAllDogs, keepDogs, updateSearchBar, updateFilters} from "../../redux/actions/index"
 import { useLocation } from "react-router-dom";
 import style from "./SearchDog.module.css"
 
@@ -9,6 +9,7 @@ function SearchDog() {
         search:""
     })
 
+    const totalDogs = useSelector(state => state.totaDogs)
     const dispatch = useDispatch()
 
     function handleChange(event) {
@@ -26,11 +27,21 @@ function SearchDog() {
     }
     
     async function showAllDogs(){
-        const allDogs = await getAllDogs()
-        if (typeof(allDogs.payload)=== "string") {return alert(allDogs.payload)}
-        else {
-            await dispatch(allDogs)
-            await dispatch(keepDogs(allDogs.payload))
+        if (totalDogs.length) {
+            await dispatch(keepDogs(totalDogs))
+            await dispatch(updateSearchBar(""))
+            await dispatch(updateFilters({
+                temperamentsToFilter: [],
+                temperamentsFiltered: [],
+                locationToFilter:""
+            }))
+        } else {
+            const allDogs = await getAllDogs()
+            if (typeof(allDogs.payload)=== "string") {return alert(allDogs.payload)}
+            else {
+                await dispatch(allDogs)
+                await dispatch(keepDogs(allDogs.payload))
+        }
         }
     }
 
