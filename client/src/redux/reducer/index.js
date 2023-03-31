@@ -3,6 +3,7 @@ import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENT
 const initialState = {
     totaDogs: [],
     dogs: [],
+    searchBar: "",
     filters: {},
     dogDetail: {},
     temperaments: []
@@ -75,10 +76,7 @@ const rootReducer = (state = initialState, action) => {
         case UPDATE_SEARCHBAR:
             return {
                 ...state,
-                filters: {
-                    ...state.filters,
-                    searchBar: payload
-                }
+                searchBar: payload
             }
         default:
             return state
