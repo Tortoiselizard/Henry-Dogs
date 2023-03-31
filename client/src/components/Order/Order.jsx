@@ -18,8 +18,15 @@ function Order() {
     const dispatch = useDispatch()
 
     React.useEffect(() => {
-        changeInputChecked()
-    }, [changeInputChecked])
+        if (Object.keys(orderGS).length) {
+            setOrderState(orderGS)
+            changeInputChecked()
+        }
+    }, [orderGS])
+
+    React.useEffect(() => {
+        orderDispatch()
+    },[dogs])
     
     const mergeSort = (array) => {
         const pivote = Math.round(array.length/2)
@@ -104,10 +111,11 @@ function Order() {
             //     }
             //     return (regNumber.test(a.weight.metric.split(" - ")[0])? null:Number(a.weight.metric.split(" - ")[0]))-(regNumber.test(b.weight.metric.split(" - ")[0])? null:Number(b.weight.metric.split(" - ")[0]))
             // })
-            inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderWeight(sortData.reverse())):
-            dispatch(orderWeight(sortData))
+            if (!sortData.every((n, index) => n===[...dogs][index])) {
+                inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderWeight(sortData.reverse())): dispatch(orderWeight(sortData))
+            }
         }
-        else {
+        else if (inputCheckedOrder && inputCheckedOrder.value === "abc") {
             data.sort((a,b) => {
                 for (let i = 0; i<(a.name.length<b.name.length?b.name.length:a.name.length); i++) {
                     if (a.name.charCodeAt(i)-b.name.charCodeAt(i)===0) {
@@ -125,8 +133,11 @@ function Order() {
             //     }
             //     return 0
             // })
-            inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderAlfabetic(data.reverse())):
-            dispatch(orderAlfabetic(data))
+            if (!data.every((n, index) => n===[...dogs][index])) {
+                inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderAlfabetic(data.reverse())):
+                dispatch(orderAlfabetic(data))
+            }
+            
         }
         dispatch(updateOrder({
             type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
@@ -138,13 +149,17 @@ function Order() {
         const inputsOrder = document.getElementsByName("inputOrder")
         const inputSence = document.getElementsByName("inputOrderSence")
         for (let input of inputsOrder) {
-            if (input.value === orderState.type) {
+            if (input.value === orderGS.type) {
                 input.checked = true
+            } else {
+                input.checked = false
             }
         }
         for (let input of inputSence) {
-            if (input.value === orderState.sense) {
+            if (input.value === orderGS.sense) {
                 input.checked = true
+            } else {
+                input.checked = false
             }
         }
     
