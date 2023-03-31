@@ -8,10 +8,10 @@ function Filter() {
     const globalState = useSelector(state => state)
     
     const [stateFilter, setStateFilter] = React.useState( (Object.keys(globalState.filters).length && globalState.filters) || {
-        searchBar: "rata",
         temperamentsToFilter: [],
         temperamentsFiltered: [],
-        locationToFilter:""
+        locationToFilter:"",
+        searchBar: "",
     })
     
     const dispatch = useDispatch()
@@ -135,7 +135,7 @@ function Filter() {
     }
 
     async function goBack(event) {
-        const actionAllDogs = await getAllDogs()
+        const actionAllDogs = await getAllDogs(globalState.filters.searchBar)
         const dogsGS = actionAllDogs.payload
         const buttonCloseFiltered = event.target.name.slice(19)
         if (buttonCloseFiltered[0]==="T") {
