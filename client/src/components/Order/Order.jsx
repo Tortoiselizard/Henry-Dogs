@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector, useDispatch} from "react-redux"
-import {orderAlfabetic, orderWeight} from "../../redux/actions/index"
+import {orderAlfabetic, orderWeight, updateOrder} from "../../redux/actions/index"
 import style from "./Order.module.css"
 
 const regNumber = /[^0-9-. ]/
@@ -8,8 +8,19 @@ const regNumber = /[^0-9-. ]/
 function Order() {
 
     const dogs = useSelector(state => state.dogs)
+    const orderGS = useSelector(state => state.order)
+
+    const [orderState, setOrderState] = React.useState((Object.keys(orderGS).length && orderGS) || {
+        type: "",
+        sense: "",
+    })
+
     const dispatch = useDispatch()
 
+    React.useEffect(() => {
+        changeInputChecked()
+    }, [changeInputChecked])
+    
     const mergeSort = (array) => {
         const pivote = Math.round(array.length/2)
         let left = array.slice(0,pivote)
@@ -78,7 +89,12 @@ function Order() {
                 break
             }
         }
-        
+
+        setOrderState((orderState) => ({
+            type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
+            sense: inputCheckedSence?inputCheckedSence.value:orderState.sense
+        }))
+
         if (inputCheckedOrder && inputCheckedOrder.value === "weight") {
             // const sortData = [dogs[1]]
             const sortData = mergeSort(data)
@@ -112,6 +128,26 @@ function Order() {
             inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderAlfabetic(data.reverse())):
             dispatch(orderAlfabetic(data))
         }
+        dispatch(updateOrder({
+            type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
+            sense: inputCheckedSence?inputCheckedSence.value:orderState.sense
+        }))
+    }
+
+    function changeInputChecked() {
+        const inputsOrder = document.getElementsByName("inputOrder")
+        const inputSence = document.getElementsByName("inputOrderSence")
+        for (let input of inputsOrder) {
+            if (input.value === orderState.type) {
+                input.checked = true
+            }
+        }
+        for (let input of inputSence) {
+            if (input.value === orderState.sense) {
+                input.checked = true
+            }
+        }
+    
     }
 
     return <div className={style.Order}>
