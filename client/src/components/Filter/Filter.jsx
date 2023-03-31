@@ -10,8 +10,7 @@ function Filter() {
     const [stateFilter, setStateFilter] = React.useState( (Object.keys(globalState.filters).length && globalState.filters) || {
         temperamentsToFilter: [],
         temperamentsFiltered: [],
-        locationToFilter:"",
-        searchBar: "",
+        locationToFilter:""
     })
     
     const dispatch = useDispatch()
@@ -22,12 +21,16 @@ function Filter() {
         changeInputChecked()
     }, [dispatch])
 
+    // React.useEffect(() => {
+    //     setStateFilter(stateFilter => ({
+    //         ...stateFilter,
+    //         searchBar: globalState.filters.searchBar
+    //     }))
+    // }, [globalState])
+
     React.useEffect(() => {
-        setStateFilter(stateFilter => ({
-            ...stateFilter,
-            searchBar: globalState.filters.searchBar
-        }))
-    }, [globalState])
+        if(Object.keys(globalState.filters).length) setStateFilter(globalState.filters)
+    }, [globalState.filters])
 
     function addTemperamentToFilter() {
         const input = document.getElementsByName("inputFilter")
@@ -62,7 +65,6 @@ function Filter() {
             const dogsToFilter = [...listDogs]
             if (dogsToFilter.length) {
                 const action = await getDogsForTemperaments(state.temperamentsFiltered, dogsToFilter)
-                // dispatch(action)
                 return [action, state]
             } 
             return [{payload: listDogs}, state]
@@ -101,20 +103,10 @@ function Filter() {
         return [{payload: listDogs}, state]
     }
 
-    async function filter(state = stateFilter, dogsGS = globalState.totaDogs) {
-        // console.log("entre en filtrar")
-        // console.log(state)
-        // console.log(dogsGS)
-        // const listDogs = await getAllDogs()
-        // console.log(listDogs)
-        // const dogsFilteredForTemperament = await filterForTemperament(globalState.dogs)
-        // console.log(dogsFilteredForTemperament.payload)
-
-        // const dogsFilteredForLocation = await filterForLocation(globalState.dogs)
-        // console.log(dogsFilteredForLocation.payload)
-        // let listDogsFiltered
-
-        const arrayFilter = [filterForTemperament, filterForLocation]
+    async function filter(state = stateFilter, dogsGS = globalState.totalDogs) {
+        const actionTotalDogs = await getAllDogs(globalState.searchBar)
+        dogsGS = actionTotalDogs.payload
+        const arrayFilter = [filterForLocation, filterForTemperament]
         let action
         for (let i=0, acc=[{payload: dogsGS}, state]; i<arrayFilter.length; i++) {
             const listDogsFiltered = await arrayFilter[i](acc[0].payload, acc[1])
@@ -135,7 +127,7 @@ function Filter() {
     }
 
     async function goBack(event) {
-        const actionAllDogs = await getAllDogs(globalState.filters.searchBar)
+        const actionAllDogs = await getAllDogs(globalState.searchBar)
         const dogsGS = actionAllDogs.payload
         const buttonCloseFiltered = event.target.name.slice(19)
         if (buttonCloseFiltered[0]==="T") {
@@ -176,11 +168,11 @@ function Filter() {
 
     return <div className={style.Filter}>
         {
-            stateFilter.searchBar?
+            globalState.searchBar?
             <div>
                 <h3 className={style.titulo}>Busqueda</h3>
                 {
-                    <label>{stateFilter.searchBar}</label>
+                    <label>{globalState.searchBar}</label>
                 }
             </div>:null
         }
