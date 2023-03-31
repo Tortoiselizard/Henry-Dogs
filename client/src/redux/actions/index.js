@@ -13,6 +13,7 @@ export const UPDATE_TEMPERAMENTS = "UPDATE_TEMPERAMENTS"
 export const KEE_DOGS = "KEE_DOGS"
 export const UPDATE_FILTERS = "UPDATE_FILTERS"
 export const UPDATE_SEARCHBAR = "UPDATE_SEARCHBAR"
+export const UPDATE_ORDER = "UPDATE_ORDER"
 
 // export const probando = () => {
 //     return fetch('http://localhost:3001/dogs')
@@ -222,4 +223,8 @@ export const updateFilters = (filters) => {
 
 export const updateSearchBar = (input) => {
     return {type: UPDATE_SEARCHBAR, payload: input}
+}
+
+export const updateOrder = (input) => {
+    return {type: UPDATE_ORDER, payload: input}
 }
