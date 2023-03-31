@@ -21,6 +21,11 @@ function SearchDog() {
         if (Array.isArray(action.payload)) {
             dispatch(keepDogs(action.payload))
             dispatch(updateSearchBar(input.search))
+            await dispatch(updateFilters({
+                temperamentsToFilter: [],
+                temperamentsFiltered: [],
+                locationToFilter:""
+            }))
         }
         else {alert(action.payload)}
         setInput({search:""})
