@@ -15,6 +15,8 @@ function Order() {
         sense: "",
     })
 
+    const [dogsState, setDogsState] = React.useState(dogs)
+
     const dispatch = useDispatch()
 
     React.useEffect(() => {
@@ -25,7 +27,9 @@ function Order() {
     }, [orderGS])
 
     React.useEffect(() => {
-        orderDispatch()
+        if ((!dogs.every((n, index) => n===dogsState[index]) && orderState.type!=="" && orderState.sense!=="")) {
+            orderDispatch()
+        }
     },[dogs])
     
     const mergeSort = (array) => {
@@ -96,27 +100,32 @@ function Order() {
                 break
             }
         }
-
-        setOrderState((orderState) => ({
-            type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
-            sense: inputCheckedSence?inputCheckedSence.value:orderState.sense
-        }))
-
+        // console.log("tipo:",inputCheckedOrder && inputCheckedOrder.value, "sentido:", inputCheckedSence && inputCheckedSence.value)
         if (inputCheckedOrder && inputCheckedOrder.value === "weight") {
             // const sortData = [dogs[1]]
-            const sortData = mergeSort(data)
+            let sortData = mergeSort(data)
             // data.sort((a,b) => {
             //     if ((regNumber.test(a.weight.metric.split(" - ")[0])? null: Number(a.weight.metric.split(" - ")[0]))-(regNumber.test(b.weight.metric.split(" - ")[0])? null:Number(b.weight.metric.split(" - ")[0])) === 0) {
             //         return (regNumber.test(a.weight.metric.split(" - ")[1])? null:Number(a.weight.metric.split(" - ")[1]))-(regNumber.test(b.weight.metric.split(" - ")[1])? null:Number(b.weight.metric.split(" - ")[1]))
             //     }
             //     return (regNumber.test(a.weight.metric.split(" - ")[0])? null:Number(a.weight.metric.split(" - ")[0]))-(regNumber.test(b.weight.metric.split(" - ")[0])? null:Number(b.weight.metric.split(" - ")[0]))
             // })
-            if (!sortData.every((n, index) => n===[...dogs][index])) {
-                inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderWeight(sortData.reverse())): dispatch(orderWeight(sortData))
+            if (inputCheckedSence && inputCheckedSence.value==="des") {
+                // console.log("entre")
+                sortData = sortData.reverse()
+            }
+            // console.log("dogs:", [...dogs])
+            // console.log("sortData", sortData)
+            // console.log(Boolean(!sortData.every((n, index) => n===[...dogs][index])))
+            if (!dogs.every((n, index) => n===sortData[index])) {
+                // console.log(sortData)
+                setDogsState(sortData)
+                dispatch(orderWeight(sortData))
             }
         }
         else if (inputCheckedOrder && inputCheckedOrder.value === "abc") {
-            data.sort((a,b) => {
+            let sortData = [...dogs]
+            sortData.sort((a,b) => {
                 for (let i = 0; i<(a.name.length<b.name.length?b.name.length:a.name.length); i++) {
                     if (a.name.charCodeAt(i)-b.name.charCodeAt(i)===0) {
                         continue
@@ -133,13 +142,22 @@ function Order() {
             //     }
             //     return 0
             // })
-            if (!data.every((n, index) => n===[...dogs][index])) {
-                inputCheckedSence && inputCheckedSence.value==="des"?dispatch(orderAlfabetic(data.reverse())):
-                dispatch(orderAlfabetic(data))
+            if (inputCheckedSence && inputCheckedSence.value==="des") {
+                sortData = sortData.reverse()
+            }
+            if (!dogs.every((n, index) => n===sortData[index])) {
+                // console.log(sortData)
+                setDogsState(sortData)
+                dispatch(orderWeight(sortData))
             }
             
         }
         dispatch(updateOrder({
+            type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
+            sense: inputCheckedSence?inputCheckedSence.value:orderState.sense
+        }))
+
+        setOrderState((orderState) => ({
             type: inputCheckedOrder?inputCheckedOrder.value:orderState.type,
             sense: inputCheckedSence?inputCheckedSence.value:orderState.sense
         }))
