@@ -18,44 +18,58 @@ function SearchDog() {
 
     async function searchDispatch() {
         const action = await getAllDogs(input.search)
+        const actionTotalDogs = await getAllDogs()
+
         if (Array.isArray(action.payload)) {
             await dispatch(updateFilters({
                 temperamentsToFilter: [],
                 temperamentsFiltered: [],
                 locationToFilter:""
             }))
-            dispatch(updateSearchBar(input.search))
+            await dispatch(updateSearchBar(input.search))
             await dispatch(updateOrder({
                 type: "",
                 sense: "",
             }))
             dispatch(keepDogs(action.payload))
+            dispatch(actionTotalDogs)
         }
         else {alert(action.payload)}
         setInput({search:""})
     }
     
     async function showAllDogs(){
-        if (totalDogs.length) {
-            await dispatch(updateFilters({
-                temperamentsToFilter: [],
-                temperamentsFiltered: [],
-                locationToFilter:""
-            }))
-            await dispatch(updateSearchBar(""))
-            await dispatch(updateOrder({
-                type: "",
-                sense: "",
-            }))
-            await dispatch(keepDogs(totalDogs))
-        } else {
+        // if (totalDogs.length) {
+        //     await dispatch(updateFilters({
+        //         temperamentsToFilter: [],
+        //         temperamentsFiltered: [],
+        //         locationToFilter:""
+        //     }))
+        //     await dispatch(updateSearchBar(""))
+        //     await dispatch(updateOrder({
+        //         type: "",
+        //         sense: "",
+        //     }))
+        //     await dispatch(keepDogs(totalDogs))
+        // }
+        // else {
             const allDogs = await getAllDogs()
             if (typeof(allDogs.payload)=== "string") {return alert(allDogs.payload)}
             else {
+                await dispatch(updateFilters({
+                    temperamentsToFilter: [],
+                    temperamentsFiltered: [],
+                    locationToFilter:""
+                    }))
+                await dispatch(updateSearchBar(""))
+                await dispatch(updateOrder({
+                    type: "",
+                    sense: "",
+                }))
                 await dispatch(allDogs)
                 await dispatch(keepDogs(allDogs.payload))
         }
-        }
+        // }
     }
 
     return <div className={style.SearchDog}>
