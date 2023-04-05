@@ -103,9 +103,12 @@ function Filter() {
         return [{payload: listDogs}, state]
     }
 
-    async function filter(state = stateFilter, dogsGS = globalState.totalDogs) {
-        const actionTotalDogs = await getAllDogs(globalState.searchBar)
-        dogsGS = actionTotalDogs.payload
+    async function filter(state = stateFilter, dogsGS = globalState.totaDogs) {
+        // const actionTotalDogs = await getAllDogs(globalState.searchBar)
+        // dogsGS = actionTotalDogs.payload
+        dogsGS = dogsGS.filter(dog => {
+            if (dog.name.toLowerCase().includes(globalState.searchBar.toLowerCase())) return true
+        })
         const arrayFilter = [filterForLocation, filterForTemperament]
         let action
         for (let i=0, acc=[{payload: dogsGS}, state]; i<arrayFilter.length; i++) {
@@ -127,8 +130,10 @@ function Filter() {
     }
 
     async function goBack(event) {
-        const actionAllDogs = await getAllDogs(globalState.searchBar)
-        const dogsGS = actionAllDogs.payload
+        // const actionAllDogs = await getAllDogs(globalState.searchBar)
+        // const dogsGS = globalState.totaDogs.filter(dog => {
+        //     if (dog.name.toLowerCase().includes(globalState.searchBar.toLowerCase())) return true
+        // })
         const buttonCloseFiltered = event.target.name.slice(19)
         if (buttonCloseFiltered[0]==="T") {
             const newTemperamentsFiltered = [...stateFilter.temperamentsFiltered]
@@ -138,7 +143,7 @@ function Filter() {
                 temperamentsFiltered: newTemperamentsFiltered
             }
             setStateFilter(state=> newState)
-            filter(newState, dogsGS)
+            filter(newState)
         }
         else if (buttonCloseFiltered[0]==="L") {
             // console.log("entre en L")
@@ -150,7 +155,7 @@ function Filter() {
             }
             // console.log(newState)
             setStateFilter(state=> newState)
-            filter(newState, dogsGS)
+            filter(newState)
         }
     }
 
