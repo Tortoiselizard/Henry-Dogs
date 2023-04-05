@@ -28,7 +28,14 @@ function Home() {
             ...showDogs,
             list:dogsGlobalState.slice(showDogs.start, showDogs.start+8)
         }))
-    },[dogsGlobalState, showDogs.start, showDogs.end])
+    },[dogsGlobalState, showDogs.start])
+
+    React.useEffect(()=> {
+        setShowDogs((showDogs) => ({
+            ...showDogs,
+            start:0
+        }))
+    },[dogsGlobalState])
 
     function changeDogs(event) {
         switch (event.target.name) {

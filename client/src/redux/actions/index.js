@@ -11,6 +11,11 @@ export const ORDER_ABC = "ORDER_ABC"
 export const ORDER_WEIGHT = "ORDER_WEIGHT"
 export const UPDATE_TEMPERAMENTS = "UPDATE_TEMPERAMENTS"
 export const KEE_DOGS = "KEE_DOGS"
+export const UPDATE_FILTERS = "UPDATE_FILTERS"
+export const UPDATE_SEARCHBAR = "UPDATE_SEARCHBAR"
+export const UPDATE_ORDER = "UPDATE_ORDER"
+export const ORDER_WEIGHT_TOTAL = "ORDER_WEIGHT_TOTAL"
+export const ORDER_ABC_TOTAL = "ORDER_ABC_TOTAL"
 
 // export const probando = () => {
 //     return fetch('http://localhost:3001/dogs')
@@ -199,6 +204,10 @@ export const orderAlfabetic = (data) => {
     return {type: ORDER_ABC, payload: data}
 }
 
+export const orderAlfabeticTotal = (data) => {
+    return {type: ORDER_ABC_TOTAL, payload: data}
+}
+
 export const orderWeight = (data) => {
     // const sortData = data.sort((a,b) => {
     //     const rangeA = a.weight.imperial.split(" - ")
@@ -210,6 +219,22 @@ export const orderWeight = (data) => {
     return {type: ORDER_WEIGHT, payload: data}
 }
 
+export const orderWeightTotal = (data) => {
+    return {type: ORDER_WEIGHT_TOTAL, payload: data}
+}
+
 export const keepDogs = (dogs) => {
     return {type: KEE_DOGS, payload: dogs}
+}
+
+export const updateFilters = (filters) => {
+    return {type: UPDATE_FILTERS, payload: filters}
+}
+
+export const updateSearchBar = (input) => {
+    return {type: UPDATE_SEARCHBAR, payload: input}
+}
+
+export const updateOrder = (input) => {
+    return {type: UPDATE_ORDER, payload: input}
 }

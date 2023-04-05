@@ -35,8 +35,8 @@ function DogDetail() {
             <div>
                 <h1 className={style.name}>{dogDetail.name}</h1>
                 <label className={style.temperamentos}><span>Temperaments: </span><p>{dogDetail.temperament}</p></label>
-                <label className={style.alto}><span>Height: </span><p>{dogDetail.height}</p></label>
-                <label className={style.peso}><span>Weight (kg): </span><p>{dogDetail.weight}</p></label>
+                <label className={style.alto}><span>Height (In): </span><p>{dogDetail.height}</p></label>
+                <label className={style.peso}><span>Weight (Lb): </span><p>{dogDetail.weight}</p></label>
                 <label className={style.years}><span>years: </span><p>{dogDetail.life_span}</p></label>        
             </div>
         </div>:null}

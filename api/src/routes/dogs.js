@@ -8,6 +8,7 @@ const {YOUR_API_KEY} = process.env
 const router = Router()
 
 let idDog = 1
+const regNumber = /[^0-9-.– ]/
 
 router.post("/", async(req, res) => {
     const {name, height, weight, life_span, image, temperaments} = req.body
@@ -49,8 +50,12 @@ router.get("/", async (req, res) => {
             }).then(data => data.map(dog => ({
                 id: dog.id,
                 name: dog.name,
-                height: dog.height.metric,
-                weight: dog.weight.metric,
+                height: dog.height.imperial,
+                weight: regNumber.test(dog.weight.imperial)?
+                    dog.weight.imperial.replace(dog.weight.imperial.split("-").find(str => regNumber.test(str)).trim(), dog.weight.imperial.split("-").find(str => !regNumber.test(str)).trim())
+                    :
+                    dog.weight.imperial,
+                // weight: dog.weight.imperial,
                 life_span: dog.life_span,
                 temperament: dog.temperament,
                 image: dog.image.url

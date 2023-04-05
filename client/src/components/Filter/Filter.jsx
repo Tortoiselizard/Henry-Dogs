@@ -1,23 +1,36 @@
 import React from "react";
 import {useDispatch, useSelector} from "react-redux"
-import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments} from "../../redux/actions/index"
+import {getAllTemperaments, getDogsForTemperaments, addTemperamentsFilter, getDogsForLocation, getAllDogs, probando, keepDogs, updateTemperaments, updateFilters} from "../../redux/actions/index"
 import style from "./Filter.module.css"
 
 function Filter() {
 
-    const [stateFilter, setStateFilter] = React.useState({
+    const globalState = useSelector(state => state)
+    
+    const [stateFilter, setStateFilter] = React.useState( (Object.keys(globalState.filters).length && globalState.filters) || {
         temperamentsToFilter: [],
         temperamentsFiltered: [],
         locationToFilter:""
     })
     
     const dispatch = useDispatch()
-    const globalState = useSelector(state => state)
 
     React.useEffect(async () => {
         await dispatch(updateTemperaments())
         await dispatch(getAllTemperaments())
+        changeInputChecked()
     }, [dispatch])
+
+    // React.useEffect(() => {
+    //     setStateFilter(stateFilter => ({
+    //         ...stateFilter,
+    //         searchBar: globalState.filters.searchBar
+    //     }))
+    // }, [globalState])
+
+    React.useEffect(() => {
+        if(Object.keys(globalState.filters).length) setStateFilter(globalState.filters)
+    }, [globalState.filters])
 
     function addTemperamentToFilter() {
         const input = document.getElementsByName("inputFilter")
@@ -52,82 +65,60 @@ function Filter() {
             const dogsToFilter = [...listDogs]
             if (dogsToFilter.length) {
                 const action = await getDogsForTemperaments(state.temperamentsFiltered, dogsToFilter)
-                // dispatch(action)
-                setStateFilter(() => ({
-                    ...state,
-                    temperamentsFiltered: [...state.temperamentsFiltered]
-                }))
-                return action
+                return [action, state]
             } 
-            const action = await getDogsForTemperaments(state.temperamentsFiltered)
-            // dispatch(action)
-            setStateFilter(() => ({
-                ...state,
-                temperamentsFiltered: [...state.temperamentsFiltered]
-            }))
-            return action
+            return [{payload: listDogs}, state]
         }
         // setStateFilter(state => ({...state}))
         // dispatch(keepDogs(listDogs))
         // console.log(listDogs)
-        return {payload: listDogs}
+        return [{payload: listDogs}, state]
     }
 
     async function filterForLocation(listDogs, state) {
         // console.log(state)
         // console.log(listDogs)
+        const dogsToFilter = [...listDogs]
         const inputsLocation = document.getElementsByName("inputFilterLocation")
         // console.log(inputsLocation)
         let inputChecked
         inputsLocation.forEach(input => {if (input.checked) inputChecked = input})
         // console.log(inputChecked)
         if (inputChecked !== undefined) {
-            const dogsToFilter = [...listDogs]
+            state = {
+                ...state,
+                locationToFilter: inputChecked.value
+            }
             if (dogsToFilter.length) {
                 const action = await getDogsForLocation(inputChecked.value, dogsToFilter)
                 // console.log(action)
                 // dispatch(action)
-                setStateFilter(state => ({
-                    ...state,
-                    locationToFilter: inputChecked.value
-                }))
-                return action
-            } 
+                return [action, state]
+            }
+            return [{payload: listDogs}, state]
         }
         // setStateFilter(state => ({...state}))
         // console.log("no entre en el inputChecked y retorno todo el listDogs")
         // dispatch(keepDogs(listDogs))
-        return {payload: listDogs}
+        return [{payload: listDogs}, state]
     }
 
-    async function filter(state = stateFilter, dogsGS = globalState.dogs) {
-        // console.log("entre en filtrar")
-        // console.log(state)
-        // console.log(dogsGS)
-        // const listDogs = await getAllDogs()
-        // console.log(listDogs)
-        // const dogsFilteredForTemperament = await filterForTemperament(globalState.dogs)
-        // console.log(dogsFilteredForTemperament.payload)
-
-        // const dogsFilteredForLocation = await filterForLocation(globalState.dogs)
-        // console.log(dogsFilteredForLocation.payload)
-        // let listDogsFiltered
-
-        const arrayFilter = [filterForTemperament, filterForLocation]
+    async function filter(state = stateFilter, dogsGS = globalState.totaDogs) {
+        // const actionTotalDogs = await getAllDogs(globalState.searchBar)
+        // dogsGS = actionTotalDogs.payload
+        dogsGS = dogsGS.filter(dog => {
+            if (dog.name.toLowerCase().includes(globalState.searchBar.toLowerCase())) return true
+        })
+        const arrayFilter = [filterForLocation, filterForTemperament]
         let action
-        for (let i=0, acc={payload: dogsGS}; i<arrayFilter.length; i++) {
-            const listDogsFiltered = await arrayFilter[i](acc.payload, state)
+        for (let i=0, acc=[{payload: dogsGS}, state]; i<arrayFilter.length; i++) {
+            const listDogsFiltered = await arrayFilter[i](acc[0].payload, acc[1])
             acc = listDogsFiltered
             action = acc
         }
-        // console.log(action)
-        dispatch(keepDogs(action.payload))
-
-        setStateFilter((stateFilter) => ({
-            ...stateFilter,
-            temperamentsToFilter: []
-
-        }))
+        setStateFilter(action[1])
+        dispatch(updateFilters(action[1]))
+        dispatch(keepDogs(action[0].payload))
 
         // const arrayFiltered = [filterForTemperament, filterForLocation].reduce( async (acc, cur) => {
         //     console.log(acc.payload)
@@ -139,20 +130,20 @@ function Filter() {
     }
 
     async function goBack(event) {
-        const actionAllDogs = await getAllDogs()
-        const dogsGS = actionAllDogs.payload
-        // console.log(dogsGS)
+        // const actionAllDogs = await getAllDogs(globalState.searchBar)
+        // const dogsGS = globalState.totaDogs.filter(dog => {
+        //     if (dog.name.toLowerCase().includes(globalState.searchBar.toLowerCase())) return true
+        // })
         const buttonCloseFiltered = event.target.name.slice(19)
         if (buttonCloseFiltered[0]==="T") {
             const newTemperamentsFiltered = [...stateFilter.temperamentsFiltered]
             newTemperamentsFiltered.splice(buttonCloseFiltered.slice(1),1)
             const newState = {
                 ...stateFilter,
-                temperamentsToFilter: newTemperamentsFiltered ,
                 temperamentsFiltered: newTemperamentsFiltered
             }
             setStateFilter(state=> newState)
-            filter(newState, dogsGS)
+            filter(newState)
         }
         else if (buttonCloseFiltered[0]==="L") {
             // console.log("entre en L")
@@ -164,11 +155,32 @@ function Filter() {
             }
             // console.log(newState)
             setStateFilter(state=> newState)
-            filter(newState, dogsGS)
+            filter(newState)
         }
     }
 
+    function changeInputChecked() {
+        var input
+        if (stateFilter.locationToFilter === "API") {
+            input = document.querySelector("#inputFilterForAPI")
+        }
+        else if (stateFilter.locationToFilter === "DB") {
+            input = document.querySelector("#inputFilterForDB")
+        }
+        else return
+        input.checked=true
+    }
+
     return <div className={style.Filter}>
+        {
+            globalState.searchBar?
+            <div>
+                <h3 className={style.titulo}>Busqueda</h3>
+                {
+                    <label>{globalState.searchBar}</label>
+                }
+            </div>:null
+        }
         <h3 className={style.titulo}>Filtrar</h3>
         <div className={style.showFiltrado}>        
             {
@@ -238,9 +250,8 @@ function Filter() {
         {/* <input type="radio" name="inputFilterLocation" id="inputFilterForTD" value="TD"></input>
         <label for="inputFilterForTD">TODOS </label> */}
 
-        <button onClick={() => {
-            console.log({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, stateFilter.temperamentsToFilter]})
-            filter({...stateFilter, temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}} className={style.botonFiltrar}>Filtrar</button>
+        <button className={style.botonFiltrar} onClick={() => {
+            filter({...stateFilter, temperamentsToFilter:[], temperamentsFiltered: [...stateFilter.temperamentsFiltered, ...stateFilter.temperamentsToFilter]})}}>Filtrar</button>
         <br/>
         
     </div>

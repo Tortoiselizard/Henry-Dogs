@@ -1,7 +1,11 @@
-import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENTS, UPDATE_TEMPERAMENTS, GET_DOGS_FOR_TEMPERAMENTS, ADD_TEMPERAMENT_FILTER, ORDER_ABC, ORDER_WEIGHT, KEE_DOGS} from "../actions/index"
+import {GET_ALL_DOGS, GET_DOG_DETAILS, CLEAN_DETAIL, CREATE_DOG, GET_TEMPERAMENTS, UPDATE_TEMPERAMENTS, GET_DOGS_FOR_TEMPERAMENTS, ADD_TEMPERAMENT_FILTER, ORDER_ABC, ORDER_WEIGHT, KEE_DOGS, UPDATE_FILTERS, UPDATE_SEARCHBAR, UPDATE_ORDER, ORDER_ABC_TOTAL, ORDER_WEIGHT_TOTAL} from "../actions/index"
 
 const initialState = {
+    totaDogs: [],
     dogs: [],
+    searchBar: "",
+    filters: {},
+    order: {},
     dogDetail: {},
     temperaments: []
 }
@@ -12,7 +16,7 @@ const rootReducer = (state = initialState, action) => {
         case GET_ALL_DOGS:
             return {
                 ...state,
-                dogs: payload
+                totaDogs: payload
             }
         case GET_DOG_DETAILS:
             return {
@@ -60,10 +64,35 @@ const rootReducer = (state = initialState, action) => {
                 ...state,
                 dogs: payload
             }
+        case ORDER_ABC_TOTAL:
+            return {
+                ...state,
+                totaDogs: payload
+            }
         case ORDER_WEIGHT:
             return {
                 ...state,
                 dogs: payload
+            }
+        case ORDER_WEIGHT_TOTAL:
+            return {
+                ...state,
+                totaDogs: payload
+            }
+        case UPDATE_FILTERS:
+            return {
+                ...state,
+                filters: payload
+            }
+        case UPDATE_SEARCHBAR:
+            return {
+                ...state,
+                searchBar: payload
+            }
+        case UPDATE_ORDER:
+            return {
+                ...state,
+                order: payload
             }
         default:
             return state
