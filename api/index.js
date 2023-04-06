@@ -27,6 +27,6 @@ const { conn } = require('./src/db.js');
 //   });
 // });
 server.listen(3001, async() => {
-  conn.sync({ force: true })
+  conn.sync({ alter: true })
   console.log('$ listening at 3001'); // eslint-disable-line no-console
 });
